@@ -1,0 +1,125 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+
+// Models
+
+model User {
+  id            String   @id @default(uuid()) @db.Uuid
+  displayName   String?
+  imageUrl      String?  // Nullable field for user profile image
+  email         String   @unique
+  clerkUserId   String   @unique
+  industry      String?
+  bio           String?
+  experience    Int?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  skills        String[] 
+
+  // Relations
+  resume           Resume?
+  coverLetters     CoverLetter[]
+  assessments      Assessment[]
+
+  @@index([email, industry, clerkUserId, id])  // Add index for faster queries on email
+}
+
+model IndustryInsight {
+  id               String   @id @default(uuid()) @db.Uuid
+  industry         String   @unique
+  salaryRanges     Json[]   // JSON format for salary ranges {role: string, min: float, mid: float, max: float, location: string?}
+  growthRate       Float
+  demandLevel      DemandLevel
+  topSkills        String[] 
+  marketOutlook    MarketOutlook   // can be 'Positive' | 'Neutral' | 'Negative'
+  keyTrends        String[] 
+  recommendedSkills String[] 
+  updatedAt        DateTime @default(now())
+  nextUpdate       DateTime // Scheduled time
+
+  @@index([industry]) // Index for faster queries on industry
+}
+
+model Resume {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @unique // User can have only one resume
+  content   String   @db.Text // Text type for large content
+  atsScore  Float?
+  feedback  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relation
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@index([userId])  // Index for faster queries on userId
+}
+
+model CoverLetter {
+  id            String            @id @default(uuid()) @db.Uuid
+  userId        String            // Foreign key to User
+  content       String            @db.Text // Text type for content
+  jobDescription String?           // Optional field for job description
+  companyName   String
+  jobTitle      String
+  status        CoverLetterStatus // Enum field for status
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Relation
+  user          User     @relation(fields: [userId], references: [id])
+
+  @@index([userId])  // Index for faster queries on userId
+}
+
+model Assessment {
+  id              String   @id @default(uuid()) @db.Uuid
+  userId          String   // Foreign key to User
+  quizScore       Float
+  questions       Json[]     // JSON format for questions and answers
+  category        String
+  improvementTip  String?  // Optional improvement tip
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Relation
+  user            User     @relation(fields: [userId], references: [id])
+
+  @@index([userId])  // Index for faster queries on userId
+}
+
+
+
+// Enums
+enum CoverLetterStatus {
+  DRAFT
+  SUBMITTED
+  APPROVED
+  REJECTED
+}
+
+enum MarketOutlook {
+  POSITIVE
+  NEUTRAL
+  NEGATIVE
+}
+
+enum DemandLevel {
+HIGH
+MEDIUM
+LOW
+}
