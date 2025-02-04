@@ -10,5 +10,5 @@ export const contactSchema = z.object({
     }),
   linkedin: z.string().url("Invalid LinkedIn URL").optional(),
   x: z.string().url("Invalid X URL").optional(),
-  portfolio: 
+  portfolio: z.string().url("Invalid portfolio URL").optional(),
 });
