@@ -1,5 +1,3 @@
-"use client";
-
 import Link from "next/link";
 
 import { Icons } from "@/components/icons";
@@ -23,11 +21,8 @@ import {
   PenBoxIcon,
   StarsIcon,
 } from "lucide-react";
-import { useState } from "react";
 
 const Header = () => {
-  const [isOpen, setIsOpen] = useState(null);
-
   return (
     <header className="border-grid sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-14 items-center mx-auto">
@@ -41,7 +36,7 @@ const Header = () => {
                 <span>Industry Insights</span>
               </Button>
 
-              <DropdownMenu onOpenChange={(menuState) => setIsOpen(menuState)}>
+              <DropdownMenu>
                 <DropdownMenuTrigger>
                   <Button>
                     <StarsIcon />

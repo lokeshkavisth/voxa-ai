@@ -11,6 +11,9 @@
   "dependencies": {
     "@clerk/nextjs": "^6.10.4",
     "@hookform/resolvers": "^3.10.0",
+    "@neondatabase/serverless": "^0.10.4",
+    "@prisma/adapter-neon": "^6.3.0",
+    "@prisma/client": "^6.3.0",
     "@radix-ui/react-accordion": "^1.2.2",
     "@radix-ui/react-alert-dialog": "^1.1.5",
     "@radix-ui/react-aspect-ratio": "^1.1.1",
@@ -43,10 +46,12 @@
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7",
     "vaul": "^1.1.2",
+    "ws": "^8.18.0",
     "zod": "^3.24.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "bufferutil": "^4.0.9",
     "eslint": "^9",
     "eslint-config-next": "15.1.6",
     "postcss": "^8",
