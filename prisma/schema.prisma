@@ -26,34 +26,36 @@ model User {
   email         String   @unique
   clerkUserId   String   @unique
   industry      String?
+  subIndustry   String?
   bio           String?
-  experience    Int?
+  experience    Int?     @default(0)
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
-  skills        String[] 
+  skills        String[] @default([])
 
   // Relations
   resume           Resume?
   coverLetters     CoverLetter[]
   assessments      Assessment[]
 
-  @@index([email, industry, clerkUserId, id])  // Add index for faster queries on email
+  @@index([email, industry, clerkUserId, id])  // Add index for faster queries
 }
 
 model IndustryInsight {
   id               String   @id @default(uuid()) @db.Uuid
   industry         String   @unique
+  subIndustry      String   
   salaryRanges     Json[]   // JSON format for salary ranges {role: string, min: float, mid: float, max: float, location: string?}
-  growthRate       Float
+  growthRate       Float    @default(0.0)
   demandLevel      DemandLevel
-  topSkills        String[] 
+  topSkills        String[] @default([])
   marketOutlook    MarketOutlook   // can be 'Positive' | 'Neutral' | 'Negative'
-  keyTrends        String[] 
-  recommendedSkills String[] 
+  keyTrends        String[] @default([])
+  recommendedSkills String[] @default([])
   updatedAt        DateTime @default(now())
   nextUpdate       DateTime // Scheduled time
 
-  @@index([industry]) // Index for faster queries on industry
+  @@index([industry, subIndustry, demandLevel]) // Index for faster queries
 }
 
 model Resume {
@@ -91,7 +93,7 @@ model CoverLetter {
 model Assessment {
   id              String   @id @default(uuid()) @db.Uuid
   userId          String   @unique @db.Uuid // Foreign key to User
-  quizScore       Float
+  quizScore       Float    @default(0.0)
   questions       Json[]     // JSON format for questions and answers
   category        String
   improvementTip  String?  // Optional improvement tip

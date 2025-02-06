@@ -15,11 +15,12 @@ CREATE TABLE "User" (
     "email" TEXT NOT NULL,
     "clerkUserId" TEXT NOT NULL,
     "industry" TEXT,
+    "subIndustry" TEXT,
     "bio" TEXT,
-    "experience" INTEGER,
+    "experience" INTEGER DEFAULT 0,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    "skills" TEXT[],
+    "skills" TEXT[] DEFAULT ARRAY[]::TEXT[],
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
@@ -28,13 +29,14 @@ CREATE TABLE "User" (
 CREATE TABLE "IndustryInsight" (
     "id" UUID NOT NULL,
     "industry" TEXT NOT NULL,
+    "subIndustry" TEXT NOT NULL,
     "salaryRanges" JSONB[],
-    "growthRate" DOUBLE PRECISION NOT NULL,
+    "growthRate" DOUBLE PRECISION NOT NULL DEFAULT 0.0,
     "demandLevel" "DemandLevel" NOT NULL,
-    "topSkills" TEXT[],
+    "topSkills" TEXT[] DEFAULT ARRAY[]::TEXT[],
     "marketOutlook" "MarketOutlook" NOT NULL,
-    "keyTrends" TEXT[],
-    "recommendedSkills" TEXT[],
+    "keyTrends" TEXT[] DEFAULT ARRAY[]::TEXT[],
+    "recommendedSkills" TEXT[] DEFAULT ARRAY[]::TEXT[],
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "nextUpdate" TIMESTAMP(3) NOT NULL,
 
@@ -73,7 +75,7 @@ CREATE TABLE "CoverLetter" (
 CREATE TABLE "Assessment" (
     "id" UUID NOT NULL,
     "userId" UUID NOT NULL,
-    "quizScore" DOUBLE PRECISION NOT NULL,
+    "quizScore" DOUBLE PRECISION NOT NULL DEFAULT 0.0,
     "questions" JSONB[],
     "category" TEXT NOT NULL,
     "improvementTip" TEXT,
@@ -96,7 +98,7 @@ CREATE INDEX "User_email_industry_clerkUserId_id_idx" ON "User"("email", "indust
 CREATE UNIQUE INDEX "IndustryInsight_industry_key" ON "IndustryInsight"("industry");
 
 -- CreateIndex
-CREATE INDEX "IndustryInsight_industry_idx" ON "IndustryInsight"("industry");
+CREATE INDEX "IndustryInsight_industry_subIndustry_demandLevel_idx" ON "IndustryInsight"("industry", "subIndustry", "demandLevel");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Resume_userId_key" ON "Resume"("userId");

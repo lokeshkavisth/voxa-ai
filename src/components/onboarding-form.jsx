@@ -31,6 +31,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { updateUser } from "@/actions/user-actions";
+import { toast } from "sonner";
 
 const OnboardingForm = ({ industries }) => {
   const [selectedIndustry, setSelectedIndustry] = useState("");
@@ -46,9 +48,27 @@ const OnboardingForm = ({ industries }) => {
     },
   });
 
-  function onSubmit(data) {
-    console.log(data);
-    // Here you would typically send the data to your backend
+  async function onSubmit(values) {
+    if (!values) {
+      toast.error("All fields are required.");
+      return;
+      // do something.
+    }
+
+    const industry = values.industry.split(" ").join("-");
+    const subIndustry = values.subIndustry.split(" ").join("-");
+    const data = {
+      ...values,
+      industry,
+      subIndustry,
+    };
+
+    const res = await updateUser(data);
+
+    if (!res) {
+      toast.error("Something went wrong, please try again.");
+      return;
+    }
   }
 
   const handleIndustryChange = (value) => {

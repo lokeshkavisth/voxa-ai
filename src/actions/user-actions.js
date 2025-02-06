@@ -2,38 +2,36 @@
 
 import prisma from "@/lib/prisma";
 import { auth, currentUser } from "@clerk/nextjs/server";
+import { revalidatePath } from "next/cache";
+import { generateAIinsights } from "./ai-actions";
 
 // check if user is already in the db if not create new user
 export async function checkUser() {
   try {
     const user = await currentUser();
 
-    if (!user) {
-      return null;
-    }
+    if (!user) return null;
 
-    const existingUser = await prisma.user.findUnique({
+    let existingUser = await prisma.user.findUnique({
       where: {
         clerkUserId: user.id,
       },
     });
 
-    if (existingUser) {
-      return existingUser;
+    if (!existingUser) {
+      existingUser = await prisma.user.create({
+        data: {
+          clerkUserId: user.id,
+          displayName: user.fullName,
+          imageUrl: user.imageUrl,
+          email: user.primaryEmailAddress.emailAddress,
+        },
+      });
     }
 
-    const newUser = await prisma.user.create({
-      data: {
-        clerkUserId: user.id,
-        displayName: user.fullName,
-        imageUrl: user.imageUrl,
-        email: user.primaryEmailAddress.emailAddress,
-      },
-    });
-
-    return newUser;
+    return existingUser;
   } catch (error) {
-    console.error("Error creating user:", error);
+    console.error("Error checking/creating user:", error);
     return null;
   }
 }
@@ -59,24 +57,27 @@ export async function updateUser(data) {
         let industryInsight = await tx.industryInsight.findUnique({
           where: {
             industry: data.industry,
+            subIndustry: data.subIndustry,
           },
         });
 
         // if not industry insight create new
         if (!industryInsight) {
-          industryInsight = await prisma.industryInsight.create({
+          const insights = await generateAIinsights(
+            data.industry,
+            data.subIndustry
+          );
+          // console.log("ai insights", insights);
+
+          industryInsight = await tx.industryInsight.create({
             data: {
               industry: data.industry,
-              salaryRanges: [],
-              growthRate: 0,
-              demandLevel: "MEDIUM",
-              topSkills: [],
-              marketOutlook: "NEUTRAL",
-              keyTrends: [],
-              recommendedSkills: [],
-              // update every week at midnight from now
+              subIndustry: data.subIndustry,
+              ...insights,
+              demandLevel: insights.demandLevel.toUpperCase(),
+              marketOutlook: insights.marketOutlook.toUpperCase(),
               nextUpdate: new Date(
-                new Date().setHours(0, 0, 0, 0) + 7 * 24 * 60 * 60 * 1000
+                new Date().setHours(0, 0, 0, 0) + 7 * 24 * 60 * 60 * 1000 // update every week at midnight from now
               ),
             },
           });
@@ -89,6 +90,7 @@ export async function updateUser(data) {
           },
           data: {
             industry: data.industry,
+            subIndustry: data.subIndustry,
             bio: data.bio,
             experience: data.experience,
             skills: data.skills,
@@ -101,11 +103,12 @@ export async function updateUser(data) {
         timeout: 10000,
       }
     );
+    // console.log("result;-->", result);
     revalidatePath("/");
-    return result.user;
-  } catch (error) {
-    console.error("Error creating user:", error);
-    throw new Error("Failed to create user");
+    return result.updatedUser;
+  } catch (err) {
+    console.error("Error creating user:", err.message);
+    throw new Error(`Failed to create user: ${err.message}`);
   }
 }
 
@@ -129,14 +132,15 @@ export async function getUserOnboardingStatus() {
       },
       select: {
         industry: true,
+        // subIndustry: true,
       },
     });
 
     return {
       isOnboarded: !!user?.industry,
     };
-  } catch (error) {
-    console.error("Error creating user:", error);
-    throw new Error("Failed to check onboarding status");
+  } catch (err) {
+    console.error("Error creating user:", err.message);
+    throw new Error(`Failed to check onboarding status: ${err.message}`);
   }
 }

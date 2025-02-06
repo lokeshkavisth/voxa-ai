@@ -1,5 +1,4 @@
 import Link from "next/link";
-
 import { Icons } from "@/components/icons";
 import { MainNav } from "@/components/main-nav";
 import { ModeToggle } from "@/components/mode-toggle";
@@ -37,7 +36,7 @@ const Header = () => {
               </Button>
 
               <DropdownMenu>
-                <DropdownMenuTrigger>
+                <DropdownMenuTrigger asChild>
                   <Button>
                     <StarsIcon />
                     <span>Explore Tools</span>

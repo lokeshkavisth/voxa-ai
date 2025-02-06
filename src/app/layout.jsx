@@ -5,6 +5,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import MouseMoveEffect from "@/components/mouse-move-effect";
+import { Toaster } from "@/components/ui/toaster";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -19,7 +20,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <ClerkProvider>
-      <html lang="en" suppressHydrationWarning>
+      <html lang="en" suppressHydrationWarning={true}>
         <body className={`${inter.variable} antialiased`}>
           <ThemeProvider
             attribute="class"
@@ -42,6 +43,8 @@ export default function RootLayout({ children }) {
                 <main className="min-h-screen space-y-16">{children}</main>
                 <Footer />
               </div>
+
+              <Toaster />
             </div>
           </ThemeProvider>
         </body>
