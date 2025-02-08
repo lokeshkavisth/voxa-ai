@@ -1,32 +1,50 @@
 "use client";
 
-import {
-  Bar,
-  BarChart,
-  ResponsiveContainer,
-  XAxis,
-  YAxis,
-  Tooltip,
-} from "recharts";
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from "./ui/chart";
 
 export default function SalaryChart({ salaryRanges }) {
   const chartData = salaryRanges.map((range) => ({
-    name: range.role.split(" ").slice(0, 2).join(" "),
+    name: range.role,
     Min: range.min,
     Median: range.median,
     Max: range.max,
   }));
 
+  const chartConfig = {
+    min: {
+      label: "Minimum",
+      color: "hsl(var(--chart-1))",
+    },
+    median: {
+      label: "Median",
+      color: "hsl(var(--chart-2))",
+    },
+    max: {
+      label: "Maximum",
+      color: "hsl(var(--chart-3))",
+    },
+  };
+
   return (
-    <ResponsiveContainer width="100%" height={400}>
-      <BarChart data={chartData}>
-        <XAxis dataKey="name" />
+    <ChartContainer config={chartConfig} className="w-full h-[420px]">
+      <BarChart accessibilityLayer data={chartData}>
+        <CartesianGrid vertical={false} />
+        <XAxis
+          dataKey={"name"}
+          tickLine={false}
+          tickMargin={10}
+          axisLine={false}
+        />
         <YAxis />
-        <Tooltip />
-        <Bar dataKey="Min" fill="#8884d8" stackId="a" />
-        <Bar dataKey="Median" fill="#82ca9d" stackId="a" />
-        <Bar dataKey="Max" fill="#ffc658" stackId="a" />
+        <ChartTooltip
+          cursor={false}
+          content={<ChartTooltipContent indicator="dashed" />}
+        />
+        <Bar dataKey="Min" fill="var(--color-min)" radius={4} />
+        <Bar dataKey="Median" fill="var(--color-median)" radius={4} />
+        <Bar dataKey="Max" fill="var(--color-max)" radius={4} />
       </BarChart>
-    </ResponsiveContainer>
+    </ChartContainer>
   );
 }

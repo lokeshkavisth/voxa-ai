@@ -1,20 +1,14 @@
 import { getUserOnboardingStatus } from "@/actions/user-actions";
 import { redirect } from "next/navigation";
-import React from "react";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { getIndustryInsights } from "@/actions/dashboard-actions";
 import SalaryChart from "@/components/salary-chart";
 import SkillsList from "@/components/skills-list";
-import TrendsList from "@/components/trends-list";
 import StatCard from "@/components/stat-card";
-import { getIndustryInsights } from "@/actions/dashboard-actions";
-import {
-  Brain,
-  BriefcaseBusiness,
-  TrendingUp,
-  User2Icon,
-  UserIcon,
-} from "lucide-react";
+import TrendsList from "@/components/trends-list";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Brain, BriefcaseBusiness, TrendingUp } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
 const Dashboard = async () => {
   const { isOnboarded } = await getUserOnboardingStatus();
@@ -24,16 +18,23 @@ const Dashboard = async () => {
   }
 
   const dashboardData = await getIndustryInsights();
+  console.log(dashboardData);
 
   return (
     <div className="container mx-auto py-8">
-      <h1 className="text-3xl font-bold mb-8">
-        Software Engineering Dashboard
-      </h1>
+      <div className="mb-6 space-y-4">
+        <h1 className="text-3xl font-bold ">Industry Insights</h1>
+        <Badge variant="secondary">
+          Last Updated: {new Date(dashboardData.updatedAt).toLocaleDateString()}
+        </Badge>
+      </div>
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         <Card className="col-span-full">
           <CardHeader>
-            <CardTitle>Salary Ranges</CardTitle>
+            <CardTitle>Salary Ranges Across Career Levels</CardTitle>
+            <p className="text-sm text-muted-foreground">
+              Salary range comparison across entry, mid, and senior-level roles.
+            </p>
           </CardHeader>
           <CardContent>
             <SalaryChart salaryRanges={dashboardData.salaryRanges} />

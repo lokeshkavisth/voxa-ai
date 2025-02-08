@@ -1,13 +1,14 @@
 "use server";
 
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { model } from "@/config/gemini";
+// import { GoogleGenerativeAI } from "@google/generative-ai";
 
-const apiKey = process.env.GEMINI_API_KEY;
-const genAI = new GoogleGenerativeAI(apiKey);
+// const apiKey = process.env.GEMINI_API_KEY;
+// const genAI = new GoogleGenerativeAI(apiKey);
 
-const model = genAI.getGenerativeModel({
-  model: "gemini-2.0-flash-lite-preview-02-05",
-});
+// const model = genAI.getGenerativeModel({
+//   model: "gemini-2.0-flash-lite-preview-02-05",
+// });
 
 const generationConfig = {
   temperature: 1,
