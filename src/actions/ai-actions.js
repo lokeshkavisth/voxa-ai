@@ -18,26 +18,26 @@ const generationConfig = {
   responseMimeType: "text/plain",
 };
 
-export const generateAIinsights = async (industry, subIndustry) => {
-  const prompt = `
-          Analyze the current state of the ${subIndustry} in ${industry} industry and providing insights strictly in the following JSON format without any additional notes or explanations:
+export const generateAiResponse = async (prompt) => {
+  // const prompt = `
+  //         Analyze the current state of the ${subIndustry} in ${industry} industry and providing insights strictly in the following JSON format without any additional notes or explanations:
 
-    {
-        "salaryRanges": [{ "role": "string", "min": number, "max": number, "median": number, "location": "string" }],
-        "growthRate": number, // Percentage value (e.g., 7.5)
-        "demandLevel": "HIGH" | "MEDIUM" | "LOW",
-        "topSkills": ["skill1", "skill2", "skill3", "skill4", "skill5"],
-        "marketOutlook": "POSITIVE" | "NEUTRAL" | "NEGATIVE",
-        "keyTrends": ["trend1", "trend2", "trend3", "trend4", "trend5"],
-        "recommendedSkills": ["skill1", "skill2", "skill3", "skill4", "skill5"]
-    }
+  //   {
+  //       "salaryRanges": [{ "role": "string", "min": number, "max": number, "median": number, "location": "string" }],
+  //       "growthRate": number, // Percentage value (e.g., 7.5)
+  //       "demandLevel": "HIGH" | "MEDIUM" | "LOW",
+  //       "topSkills": ["skill1", "skill2", "skill3", "skill4", "skill5"],
+  //       "marketOutlook": "POSITIVE" | "NEUTRAL" | "NEGATIVE",
+  //       "keyTrends": ["trend1", "trend2", "trend3", "trend4", "trend5"],
+  //       "recommendedSkills": ["skill1", "skill2", "skill3", "skill4", "skill5"]
+  //   }
 
-  REQUIREMENTS:
-    - Return ONLY the JSON output—no additional text, explanations, or markdown formatting.
-    - Include salary ranges for at least 5 common roles.
-    - Growth rate must be expressed as a percentage.
-    - Provide at least 5 skills and 5 key industry trends.
-        `;
+  // REQUIREMENTS:
+  //   - Return ONLY the JSON output—no additional text, explanations, or markdown formatting.
+  //   - Include salary ranges for at least 5 common roles.
+  //   - Growth rate must be expressed as a percentage.
+  //   - Provide at least 5 skills and 5 key industry trends.
+  //       `;
 
   const chatSession = model.startChat({
     generationConfig,

@@ -1,4 +1,4 @@
-"use server";
+// "use server";
 
 import prisma from "@/lib/prisma";
 import { model } from "@/config/gemini";
@@ -8,10 +8,11 @@ export const updateIndustryInsights = inngest.createFunction(
   {
     id: "update-industry-insights",
   },
+  // { event: "test/update.industry" },
   {
     cron: "0 0 * * 0",
   },
-  async ({ event, step }) => {
+  async ({ step }) => {
     // fetch all industries
     const industries = await step.run("fetch-industries", async () => {
       return await prisma.industryInsight.findMany({

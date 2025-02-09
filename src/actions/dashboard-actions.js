@@ -2,7 +2,8 @@
 
 import prisma from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
-import { generateAIinsights } from "./ai-actions";
+import { promptToGenInsights } from "@/data/prompts";
+import { generateAiResponse } from "./ai-actions";
 
 export async function getIndustryInsights() {
   const { userId } = await auth();
@@ -11,9 +12,6 @@ export async function getIndustryInsights() {
 
   const existingUser = await prisma.user.findUnique({
     where: { clerkUserId: userId },
-    // include: {
-    //   industryInsight: true,
-    // },
   });
 
   if (!existingUser) throw new Error("User not found");
@@ -29,10 +27,11 @@ export async function getIndustryInsights() {
   if (industryInsight) return industryInsight;
 
   try {
-    const insights = await generateAIinsights(
+    const prompt = promptToGenInsights(
       existingUser.industry,
       existingUser.subIndustry
     );
+    const insights = await generateAiResponse(prompt);
 
     const newIndustryInsight = await prisma.industryInsight.create({
       data: {

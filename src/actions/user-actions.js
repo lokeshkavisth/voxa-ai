@@ -3,7 +3,8 @@
 import prisma from "@/lib/prisma";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
-import { generateAIinsights } from "./ai-actions";
+import { generateAiResponse } from "./ai-actions";
+import { promptToGenInsights } from "@/data/prompts";
 
 // check if user is already in the db if not create new user
 export async function checkUser() {
@@ -63,10 +64,8 @@ export async function updateUser(data) {
 
         // if not industry insight create new
         if (!industryInsight) {
-          const insights = await generateAIinsights(
-            data.industry,
-            data.subIndustry
-          );
+          const prompt = promptToGenInsights(data.industry, data.subIndustry);
+          const insights = await generateAiResponse(prompt);
           // console.log("ai insights", insights);
 
           industryInsight = await tx.industryInsight.create({
@@ -142,5 +141,26 @@ export async function getUserOnboardingStatus() {
   } catch (err) {
     console.error("Error creating user:", err.message);
     throw new Error(`Failed to check onboarding status: ${err.message}`);
+  }
+}
+
+export async function getUserDetails() {
+  const { userId } = await auth();
+
+  if (!userId) throw new Error("Unauthorized");
+
+  const existingUser = await prisma.user.findUnique({
+    where: {
+      clerkUserId: userId,
+    },
+  });
+
+  if (!existingUser) throw new Error("User not found");
+
+  try {
+    return existingUser;
+  } catch (err) {
+    console.error("Error creating user:", err.message);
+    throw new Error(`Failed to get user details: ${err.message}`);
   }
 }
