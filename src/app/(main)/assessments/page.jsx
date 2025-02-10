@@ -1,10 +1,7 @@
-import { generateMCQs } from "@/actions/mock-practice";
 import { QuizPreferencesForm } from "@/components/quiz-preferences-form";
 import { RecentQuizzes } from "@/components/recent-quizzes";
 
-export default async function PracticePage() {
-  // await generateMCQs();
-
+const Assessments = () => {
   return (
     <div className="container mx-auto py-8">
       <h1 className="text-3xl font-bold mb-8">Practice Quiz</h1>
@@ -14,4 +11,6 @@ export default async function PracticePage() {
       </div>
     </div>
   );
-}
+};
+
+export default Assessments;

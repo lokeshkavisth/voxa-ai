@@ -5,12 +5,7 @@ import { auth } from "@clerk/nextjs/server";
 import { generateAiResponse } from "./ai-actions";
 import prisma from "@/lib/prisma";
 
-export async function generateMCQs({
-  skills,
-  length = 5,
-  level = "INTERMEDIATE",
-  quizType,
-}) {
+export async function generateMCQs({ skills, length, level, quizType }) {
   const { userId } = await auth();
 
   if (!userId) throw new Error("Unauthorized");
@@ -31,13 +26,13 @@ export async function generateMCQs({
       level,
       industry: existingUser.industry,
       subIndustry: existingUser.subIndustry,
-      skills: skills || existingUser.skills,
+      skills: skills,
     };
 
     const prompt = promptToGenMCQs(data);
     const { questions } = await generateAiResponse(prompt);
 
-    console.log("ai questions", questions);
+    // console.log("ai questions", questions);
     return questions;
   } catch (error) {
     console.error("Error generating MCQs:", error.message);
@@ -61,6 +56,7 @@ export async function saveResults(data) {
 
   try {
     const { questions, selectedAnswers } = data;
+    // console.log("server: ", data);
 
     const calculateResults = questions.map((item, idx) => ({
       ...item,
@@ -72,6 +68,8 @@ export async function saveResults(data) {
       (question) => !question.isCorrect
     );
 
+    let improvementTip = null;
+
     if (wrongAnswers.length > 0) {
       try {
         const data = {
@@ -81,9 +79,9 @@ export async function saveResults(data) {
         };
 
         const prompt = promptToGenImprovementTip(data);
-        const { improvementTip } = await generateAiResponse(prompt);
-
-        console.log("ai improvement tip", improvementTip);
+        const tip = await generateAiResponse(prompt);
+        improvementTip = tip.improvementTip;
+        // console.log("ai improvement tip", improvementTip);
       } catch (error) {
         console.error("Error generating improvement tip:", error.message);
         throw new Error("Failed to generate improvement tip");
@@ -93,8 +91,8 @@ export async function saveResults(data) {
     const assessment = await prisma.assessment.create({
       data: {
         userId: existingUser.id,
-        quizScore: questions.length - wrongAnswers.length,
-        questions,
+        quizScore: (wrongAnswers.length / questions.length) * 100,
+        questions: calculateResults,
         category: existingUser.industry,
         improvementTip,
       },

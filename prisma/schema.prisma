@@ -92,11 +92,11 @@ model CoverLetter {
 
 model Assessment {
   id              String   @id @default(uuid()) @db.Uuid
-  userId          String   @unique @db.Uuid // Foreign key to User
+  userId          String   @db.Uuid // Foreign key to User
   quizScore       Float    @default(0.0)
   questions       Json[]     // JSON format for questions and answers
   category        String
-  improvementTip  String?  // Optional improvement tip
+  improvementTip  String?  
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 

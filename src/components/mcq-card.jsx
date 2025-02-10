@@ -14,30 +14,14 @@ import { useEffect, useState } from "react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { Badge } from "./ui/badge";
-
-// const questions = [
-//   {
-//     question: "What is the primary purpose of Node.js?",
-//     category: "Node.js",
-//     difficulty: "BEGINNER",
-//     options: [
-//       "To create desktop applications.",
-//       "To execute JavaScript code on the server-side.",
-//       "To manage databases.",
-//       "To design user interfaces.",
-//     ],
-//     correctAnswer: "To execute JavaScript code on the server-side.",
-//     explanation:
-//       "Node.js allows developers to run JavaScript outside of a web browser, enabling server-side scripting and the creation of backend applications.",
-//     timeLimit: 30,
-//     codeSnippet: null,
-//     hints: ["Think about where JavaScript typically runs."],
-//     tags: ["Node.js", "Server-side", "JavaScript", "Backend"],
-//   },
-//   // Add more questions here...
-// ];
+import { saveResults } from "@/actions/mock-practice";
+import { useToast } from "@/hooks/use-toast";
+import { useMutation } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 
 export default function McqCard({ questions }) {
+  const { toast } = useToast();
+  const router = useRouter();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState([]);
   const [showExplanation, setShowExplanation] = useState(false);
@@ -60,16 +44,46 @@ export default function McqCard({ questions }) {
   const handleNextQuestion = () => {
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
-      //   setSelectedAnswers(null);
       setShowExplanation(false);
       setTimeLeft(questions[currentQuestionIndex + 1].timeLimit);
     }
   };
 
-  const handleSubmitAnswer = () => {
-    console.log("Selected Answer:", selectedAnswers);
+  const mutation = useMutation({
+    mutationFn: saveResults,
+    onSuccess: (data) => {
+      // console.log("success data ", data);
+      toast({
+        title: "Results saved successfully",
+      });
+      // Redirect or update the UI as needed
+      router.push("/assessments");
+    },
+    onError: (error) => {
+      // console.error("Mutation error:", error);
 
-    // setShowExplanation(true);
+      toast({
+        variant: "destructive",
+        title: "Problem saving results",
+        description: error.message,
+      });
+    },
+  });
+
+  const handleSubmitAnswer = async () => {
+    if (selectedAnswers.length === 0) {
+      toast.error(
+        "Answering all questions is required. Please select an answer for each question."
+      );
+      return;
+    }
+
+    const data = {
+      questions,
+      selectedAnswers,
+    };
+
+    mutation.mutate(data);
   };
 
   const currentQuestion = questions[currentQuestionIndex];
@@ -126,9 +140,14 @@ export default function McqCard({ questions }) {
             >
               {showExplanation ? "Hide Explanation" : "Show Explanation"}
             </Button>
-            {selectedAnswers.length === questions.length &&
-            currentQuestionIndex === questions.length - 1 ? (
-              <Button onClick={handleSubmitAnswer}>Submit Quiz</Button>
+            {/* <Button onClick={handleSubmitAnswer}>Submit Quiz</Button> */}
+            {selectedAnswers.length === questions.length ? (
+              <Button
+                onClick={handleSubmitAnswer}
+                disabled={mutation.isPending}
+              >
+                {mutation.isPending ? "Saving..." : "Submit Answers"}
+              </Button>
             ) : (
               <Button
                 onClick={handleNextQuestion}

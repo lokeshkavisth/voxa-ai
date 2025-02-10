@@ -30,11 +30,6 @@ const Header = () => {
           <div className="w-full flex-1 md:w-auto md:flex-none"></div>
           <nav className="flex items-center gap-2">
             <SignedIn>
-              <Button variant="outline">
-                <LayoutDashboardIcon className="size-4" />
-                <span>Industry Insights</span>
-              </Button>
-
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button>

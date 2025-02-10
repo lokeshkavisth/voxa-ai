@@ -1,11 +1,13 @@
 import Footer from "@/components/footer";
 import Header from "@/components/header";
+import MouseMoveEffect from "@/components/mouse-move-effect";
 import { ThemeProvider } from "@/components/theme-provider";
+import { Toaster } from "@/components/ui/toaster";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import MouseMoveEffect from "@/components/mouse-move-effect";
-import { Toaster } from "@/components/ui/toaster";
+import { DataProvider } from "@/context/data-context";
+import QueryProvider from "@/lib/query-client";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -22,31 +24,35 @@ export default function RootLayout({ children }) {
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning={true}>
         <body className={`${inter.variable} antialiased`}>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <MouseMoveEffect />
+          <QueryProvider>
+            <DataProvider>
+              <ThemeProvider
+                attribute="class"
+                defaultTheme="system"
+                enableSystem
+                disableTransitionOnChange
+              >
+                <MouseMoveEffect />
 
-            <div className="relative min-h-screen">
-              {/* Background gradients */}
-              <div className="pointer-events-none fixed inset-0">
-                <div className="absolute inset-0 bg-gradient-to-b from-background via-background/90 to-background" />
-                <div className="absolute right-0 top-0 h-[500px] w-[500px] bg-blue-500/10 blur-[100px]" />
-                <div className="absolute bottom-0 left-0 h-[500px] w-[500px] bg-purple-500/10 blur-[100px]" />
-              </div>
+                <div className="relative min-h-screen">
+                  {/* Background gradients */}
+                  <div className="pointer-events-none fixed inset-0">
+                    <div className="absolute inset-0 bg-gradient-to-b from-background via-background/90 to-background" />
+                    <div className="absolute right-0 top-0 h-[500px] w-[500px] bg-blue-500/10 blur-[100px]" />
+                    <div className="absolute bottom-0 left-0 h-[500px] w-[500px] bg-purple-500/10 blur-[100px]" />
+                  </div>
 
-              <div className="relative z-10">
-                <Header />
-                <main className="min-h-screen space-y-16">{children}</main>
-                <Footer />
-              </div>
+                  <div className="relative z-10">
+                    <Header />
+                    <main className="min-h-screen space-y-16">{children}</main>
+                    <Footer />
+                  </div>
 
-              <Toaster />
-            </div>
-          </ThemeProvider>
+                  <Toaster />
+                </div>
+              </ThemeProvider>
+            </DataProvider>
+          </QueryProvider>
         </body>
       </html>
     </ClerkProvider>

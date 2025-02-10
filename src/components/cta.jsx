@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import Link from "next/link";
 
 export default function CTA() {
   return (
@@ -13,7 +14,7 @@ export default function CTA() {
           prep, and valuable industry insights to boost your career.
         </p>
         <Button size="lg" className="mt-4 animate-bounce">
-          <span>Get Started Now</span>
+          <Link href="/insights">Get Started Now</Link>
           <ArrowRight />
         </Button>
       </div>

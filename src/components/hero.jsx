@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import Link from "next/link";
 
 export default function Hero() {
   return (
@@ -18,11 +19,11 @@ export default function Hero() {
       </div>
       <div className="flex gap-4">
         <Button size="lg">
-          Unlock My Potential
+          <Link href="/insights">Unlock My Potential</Link>
           <ArrowRight className="ml-2 h-4 w-4" />
         </Button>
         <Button variant="outline" size="lg">
-          See How It Works
+          <Link href="/about">See How It Works</Link>
         </Button>
       </div>
     </section>

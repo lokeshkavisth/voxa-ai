@@ -1,3 +1,5 @@
+"use server";
+
 import { getUserOnboardingStatus } from "@/actions/user-actions";
 import { redirect } from "next/navigation";
 
@@ -6,9 +8,9 @@ import SalaryChart from "@/components/salary-chart";
 import SkillsList from "@/components/skills-list";
 import StatCard from "@/components/stat-card";
 import TrendsList from "@/components/trends-list";
+import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Brain, BriefcaseBusiness, TrendingUp } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 
 const Dashboard = async () => {
   const { isOnboarded } = await getUserOnboardingStatus();
@@ -18,7 +20,7 @@ const Dashboard = async () => {
   }
 
   const dashboardData = await getIndustryInsights();
-  console.log(dashboardData);
+  // console.log(dashboardData);
 
   return (
     <div className="container mx-auto py-8">
