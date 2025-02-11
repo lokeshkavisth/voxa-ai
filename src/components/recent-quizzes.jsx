@@ -6,6 +6,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 
 // This would typically come from your backend or state management
 const recentQuizzes = [
@@ -32,9 +33,9 @@ const recentQuizzes = [
   },
 ];
 
-export function RecentQuizzes() {
+export function RecentQuizzes({ className }) {
   return (
-    <Card>
+    <Card className={cn("w-full", className)}>
       <CardHeader>
         <CardTitle>Recent Practice Sessions</CardTitle>
         <CardDescription>Your latest quiz attempts</CardDescription>

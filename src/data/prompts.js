@@ -84,9 +84,9 @@ Expected Output (JSON):
 }
 
 Guidelines for Generating the Tip:
- - Identify patterns in the user's mistakes (e.g., struggling with databases, syntax issues, logic errors).
- - Adjust feedback based on performance:
+ - Identify patterns in the user's mistakes.
 
+Adjust feedback based on performance:
 - 80%+ correct: Encourage advanced learning.
 - 50-80% correct: Suggest focused improvement.
 - Below 50% correct: Provide fundamental learning advice.

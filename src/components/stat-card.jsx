@@ -5,10 +5,17 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 
-export default function StatCard({ title, value, description, icon }) {
+export default function StatCard({
+  title,
+  value,
+  description,
+  icon,
+  className,
+}) {
   return (
-    <Card>
+    <Card className={cn("w-full max-h-max", className)}>
       <CardHeader className="flex-row items-center justify-between">
         <CardTitle>{title}</CardTitle>
         {icon}

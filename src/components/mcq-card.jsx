@@ -1,5 +1,6 @@
 "use client";
 
+import { saveResults } from "@/actions/mock-practice";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -10,83 +11,106 @@ import {
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { useEffect, useState } from "react";
+import { DataContext } from "@/context/data-context";
+import { useToast } from "@/hooks/use-toast";
+import { useMutation } from "@tanstack/react-query";
+import { ArrowRight } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useContext, useEffect, useState } from "react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { Badge } from "./ui/badge";
-import { saveResults } from "@/actions/mock-practice";
-import { useToast } from "@/hooks/use-toast";
-import { useMutation } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
 
 export default function McqCard({ questions }) {
   const { toast } = useToast();
   const router = useRouter();
+  const { setData } = useContext(DataContext);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState([]);
   const [showExplanation, setShowExplanation] = useState(false);
   const [timeLeft, setTimeLeft] = useState(
-    questions[currentQuestionIndex].timeLimit
+    questions?.[currentQuestionIndex]?.timeLimit || 0
   );
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setTimeLeft((prevTime) => (prevTime > 0 ? prevTime - 1 : 0));
+      setTimeLeft((prevTime) => Math.max(prevTime - 1, 0));
     }, 1000);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [currentQuestionIndex]);
 
   const handleAnswerSelection = (answer) => {
-    setSelectedAnswers((prev) => [...prev, answer]);
+    setSelectedAnswers((prev) => {
+      const newAnswers = [...prev];
+      newAnswers[currentQuestionIndex] = answer;
+      return newAnswers;
+    });
   };
 
   const handleNextQuestion = () => {
     if (currentQuestionIndex < questions.length - 1) {
-      setCurrentQuestionIndex(currentQuestionIndex + 1);
+      setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
       setShowExplanation(false);
-      setTimeLeft(questions[currentQuestionIndex + 1].timeLimit);
+      setTimeLeft(questions?.[currentQuestionIndex + 1]?.timeLimit || 0);
     }
   };
 
   const mutation = useMutation({
     mutationFn: saveResults,
     onSuccess: (data) => {
-      // console.log("success data ", data);
       toast({
-        title: "Results saved successfully",
+        title: "Answers saved successfully!",
+        description:
+          "You have successfully saved your answers. Redirecting you to the result page.",
       });
-      // Redirect or update the UI as needed
-      router.push("/assessments");
+      setData({ results: data });
+      router.push("/assessments/result");
     },
     onError: (error) => {
-      // console.error("Mutation error:", error);
-
       toast({
         variant: "destructive",
-        title: "Problem saving results",
-        description: error.message,
+        title: "Oops! Something went wrong.",
+        description: error?.message || "There was a problem with your request.",
       });
     },
   });
 
-  const handleSubmitAnswer = async () => {
-    if (selectedAnswers.length === 0) {
-      toast.error(
-        "Answering all questions is required. Please select an answer for each question."
-      );
+  const handleSubmitAnswer = () => {
+    if (selectedAnswers.length < questions.length) {
+      toast({
+        variant: "destructive",
+        title: "All questions are required.",
+        description: "Please answer all questions to proceed.",
+      });
       return;
     }
 
-    const data = {
-      questions,
-      selectedAnswers,
-    };
-
-    mutation.mutate(data);
+    mutation.mutate({ questions, selectedAnswers });
   };
 
-  const currentQuestion = questions[currentQuestionIndex];
+  const currentQuestion = questions?.[currentQuestionIndex];
+
+  if (!questions || questions.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center gap-4">
+        <p className="text-center text-lg font-medium text-gray-700">
+          It looks like there are no questions available for this assessment at
+          the moment. We're sorry for the inconvenience.
+        </p>
+        <p className="text-center text-sm text-gray-500">
+          If you want to take another assessment or try a different one, you can
+          head back to the assessment page.
+        </p>
+        <Button className="mt-4" size="lg" asChild>
+          <Link href={"/assessments"}>
+            Go to Assessments <ArrowRight />
+          </Link>
+        </Button>
+      </div>
+    );
+  }
 
   return (
     <Card>
