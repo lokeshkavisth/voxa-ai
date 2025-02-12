@@ -23,7 +23,7 @@ const Dashboard = async () => {
   // console.log(dashboardData);
 
   return (
-    <div className="container mx-auto py-8">
+    <div className="">
       <div className="mb-6 space-y-4">
         <h1 className="text-3xl font-bold ">Industry Insights</h1>
         <Badge variant="secondary">

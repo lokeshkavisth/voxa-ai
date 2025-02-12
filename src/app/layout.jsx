@@ -44,7 +44,9 @@ export default function RootLayout({ children }) {
 
                   <div className="relative z-10">
                     <Header />
-                    <main className="min-h-screen space-y-16">{children}</main>
+                    <main className="min-h-screen py-20 container mx-auto">
+                      {children}
+                    </main>
                     <Footer />
                   </div>
 
