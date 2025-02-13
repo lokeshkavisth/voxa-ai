@@ -23,7 +23,7 @@ import {
 
 const Header = () => {
   return (
-    <header className="border-grid sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-50 w-full border-b border-dashed bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-14 items-center mx-auto">
         <MainNav />
         <div className="flex flex-1 items-center justify-between gap-2 md:justify-end">
@@ -40,24 +40,21 @@ const Header = () => {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
                   <DropdownMenuItem>
-                    <Link
-                      href={"/build-resume"}
-                      className="flex items-center gap-2"
-                    >
+                    <Link href={"/resume"} className="flex items-center gap-2">
                       <FileTextIcon className="size-4" />
                       <span>Build Resume</span>
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem>
                     <Link
-                      href={"/build-cover-letter"}
+                      href={"/cover-letter"}
                       className="flex items-center gap-2"
                     >
                       <PenBoxIcon className="size-4" />
                       <span>Build Cover Letter</span>
                     </Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
+                  {/* <DropdownMenuItem>
                     <Link
                       href={"/interview-prepration"}
                       className="flex items-center gap-2"
@@ -65,7 +62,7 @@ const Header = () => {
                       <GraduationCapIcon className="size-4" />
                       <span>Interview Prepration</span>
                     </Link>
-                  </DropdownMenuItem>
+                  </DropdownMenuItem> */}
                 </DropdownMenuContent>
               </DropdownMenu>
 

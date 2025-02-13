@@ -1,43 +1,9 @@
-// import { siteConfig } from "@/config/site";
-
-// export function SiteFooter() {
-//   return (
-//     <footer className="border-grid border-t py-6 md:px-8 md:py-0">
-//       <div className="container-wrapper">
-//         <div className="container py-4">
-//           <div className="text-balance text-center text-sm leading-loose text-muted-foreground md:text-left">
-//             Built by{" "}
-//             <a
-//               href={siteConfig.links.twitter}
-//               target="_blank"
-//               rel="noreferrer"
-//               className="font-medium underline underline-offset-4"
-//             >
-//               shadcn
-//             </a>
-//             . The source code is available on{" "}
-//             <a
-//               href={siteConfig.links.github}
-//               target="_blank"
-//               rel="noreferrer"
-//               className="font-medium underline underline-offset-4"
-//             >
-//               GitHub
-//             </a>
-//             .
-//           </div>
-//         </div>
-//       </div>
-//     </footer>
-//   );
-// }
-
+import { Github, Linkedin, Twitter } from "lucide-react";
 import Link from "next/link";
-import { Github, Twitter, Linkedin } from "lucide-react";
 
 const Footer = () => {
   return (
-    <footer className="border-t">
+    <footer className="border-t border-dashed">
       <div className="container mx-auto flex flex-col gap-8 py-8 md:flex-row md:py-12">
         <div className="flex-1 space-y-4">
           <h2 className="font-bold">Voxa.ai</h2>
