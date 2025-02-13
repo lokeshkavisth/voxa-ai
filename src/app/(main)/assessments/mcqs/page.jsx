@@ -8,7 +8,7 @@ export default function MCQsPage() {
   const { data } = useContext(DataContext);
 
   return (
-    <div className="">
+    <div>
       <McqCard questions={data.questions} />
     </div>
   );
