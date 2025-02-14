@@ -1,7 +1,4 @@
-import { useFieldArray } from "react-hook-form";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Form,
@@ -12,9 +9,11 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
+import { Textarea } from "@/components/ui/textarea";
 import { PlusCircle, Trash2 } from "lucide-react";
-import { ScrollArea } from "./ui/scroll-area";
+import { useFieldArray } from "react-hook-form";
 
 export function ResumeForm({ form }) {
   const { control } = form;
@@ -211,6 +210,7 @@ export function ResumeForm({ form }) {
                   )}
                 />
                 <Button
+                  className="w-full"
                   type="button"
                   variant="destructive"
                   onClick={() => removeSocialLink(index)}
@@ -222,10 +222,11 @@ export function ResumeForm({ form }) {
             ))}
             {socialLinkFields.length < 4 && (
               <Button
+                className="w-full"
                 type="button"
                 onClick={() => appendSocialLink({ title: "", url: "" })}
               >
-                Add Social Link
+                <PlusCircle /> Add Social Link
               </Button>
             )}
           </CardContent>
@@ -313,7 +314,7 @@ export function ResumeForm({ form }) {
                       <FormControl>
                         <Textarea
                           {...field}
-                          placeholder="Enter bullet points, one per line"
+                          placeholder="To enter bullet points, insert / at the end of the line."
                         />
                       </FormControl>
                       <FormMessage />
@@ -321,6 +322,7 @@ export function ResumeForm({ form }) {
                   )}
                 />
                 <Button
+                  className="w-full"
                   type="button"
                   variant="destructive"
                   onClick={() => removeExperience(index)}
@@ -332,6 +334,7 @@ export function ResumeForm({ form }) {
             ))}
             {experienceFields.length < 4 && (
               <Button
+                className="w-full"
                 type="button"
                 onClick={() =>
                   appendExperience({
@@ -452,6 +455,7 @@ export function ResumeForm({ form }) {
                   )}
                 />
                 <Button
+                  className="w-full"
                   type="button"
                   variant="destructive"
                   onClick={() => removeEducation(index)}
@@ -463,6 +467,7 @@ export function ResumeForm({ form }) {
             ))}
             {educationFields.length < 2 && (
               <Button
+                className="w-full"
                 type="button"
                 onClick={() =>
                   appendEducation({
@@ -560,7 +565,7 @@ export function ResumeForm({ form }) {
                       <FormControl>
                         <Textarea
                           {...field}
-                          placeholder="Enter bullet points, one per line"
+                          placeholder="To enter bullet points, insert / at the end of the line."
                         />
                       </FormControl>
                       <FormMessage />
@@ -568,6 +573,7 @@ export function ResumeForm({ form }) {
                   )}
                 />
                 <Button
+                  className="w-full"
                   type="button"
                   variant="destructive"
                   onClick={() => removeProject(index)}
@@ -579,6 +585,7 @@ export function ResumeForm({ form }) {
             ))}
             {projectFields.length < 3 && (
               <Button
+                className="w-full"
                 type="button"
                 onClick={() =>
                   appendProject({
@@ -658,6 +665,7 @@ export function ResumeForm({ form }) {
                   )}
                 />
                 <Button
+                  className="w-full"
                   type="button"
                   variant="destructive"
                   onClick={() => removeAchievement(index)}
@@ -669,6 +677,7 @@ export function ResumeForm({ form }) {
             ))}
             {achievementFields.length < 4 && (
               <Button
+                className="w-full"
                 type="button"
                 onClick={() =>
                   appendAchievement({
@@ -739,6 +748,7 @@ export function ResumeForm({ form }) {
                   )}
                 />
                 <Button
+                  className="w-full"
                   type="button"
                   variant="destructive"
                   onClick={() => removeCourse(index)}
@@ -750,6 +760,7 @@ export function ResumeForm({ form }) {
             ))}
             {courseFields.length < 3 && (
               <Button
+                className="w-full"
                 type="button"
                 onClick={() =>
                   appendCourse({

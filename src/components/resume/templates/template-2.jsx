@@ -5,6 +5,21 @@ import { Mail, Phone, MapPin, Globe, MoveUpRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 const ResumeTemplate = ({ resume }) => {
+  const {
+    name,
+    jobRole,
+    profileSummary,
+    contact,
+    socialLinks,
+    experience,
+    education,
+    projects,
+    techSkills,
+    achievements,
+    courses,
+    passion,
+  } = resume;
+
   return (
     <div className="max-w-5xl mx-auto bg-background border border-dashed rounded-lg">
       <div className="grid grid-cols-3 gap-6">
@@ -13,8 +28,8 @@ const ResumeTemplate = ({ resume }) => {
         <div className="col-span-1 space-y-6 p-6 rounded-lg bg-primary-foreground">
           {/* Header */}
           <div className="text-center py-4">
-            <h1 className="text-3xl font-bold">{resume.name}</h1>
-            <p className="text-lg ">{resume.jobRole}</p>
+            <h1 className="text-3xl font-bold">{name}</h1>
+            <p className="text-lg ">{jobRole}</p>
           </div>
 
           {/* Contact */}
@@ -23,13 +38,13 @@ const ResumeTemplate = ({ resume }) => {
               <h2 className="text-xl font-semibold">Contact</h2>
               <Separator />
               <p className="flex items-center gap-2 text-muted-foreground">
-                <Mail className="size-4" /> {resume.contact.email}
+                <Mail className="size-4" /> {contact.email}
               </p>
               <p className="flex items-center gap-2 text-muted-foreground">
-                <Phone className="size-4" /> {resume.contact.phone}
+                <Phone className="size-4" /> {contact.phone}
               </p>
               <p className="flex items-center gap-2 text-muted-foreground">
-                <MapPin className="size-4" /> {resume.contact.location}
+                <MapPin className="size-4" /> {contact.location}
               </p>
             </CardContent>
           </Card>
@@ -39,7 +54,7 @@ const ResumeTemplate = ({ resume }) => {
             <CardContent className="p-4 px-0 space-y-2">
               <h2 className="text-xl font-semibold">Social Links</h2>
               <Separator />
-              {resume.socialLinks.map((link, index) => (
+              {socialLinks.map((link, index) => (
                 <p
                   key={index}
                   className="flex items-center gap-2 text-blue-600/80"
@@ -59,7 +74,7 @@ const ResumeTemplate = ({ resume }) => {
               <h2 className="text-xl font-semibold">Skills</h2>
               <Separator />
               <div className="flex flex-wrap gap-2 mt-2">
-                {resume.techSkills.map((skill, index) => (
+                {techSkills.split(",").map((skill, index) => (
                   <Badge key={index} className="font-medium">
                     {skill}
                   </Badge>
@@ -75,7 +90,7 @@ const ResumeTemplate = ({ resume }) => {
               <Separator />
               <div className="flex flex-wrap gap-2 mt-2">
                 <ul className="list-disc text-muted-foreground p-4">
-                  {resume.courses.map((course, index) => (
+                  {courses.map((course, index) => (
                     <li key={index}>
                       <div className="flex items-center gap-2">
                         {course.title}
@@ -95,12 +110,12 @@ const ResumeTemplate = ({ resume }) => {
 
           {/* Passion */}
 
-          {resume.passion && (
+          {passion && (
             <Card className="border-none shadow-none bg-transparent">
               <h2 className="text-xl font-semibold">Passion</h2>
               <Separator />
               <p className="text-muted-foreground py-4">
-                {resume.passion.title}: {resume.passion.description}
+                {passion.title}: {passion.description}
               </p>
             </Card>
           )}
@@ -113,14 +128,14 @@ const ResumeTemplate = ({ resume }) => {
             <CardContent className="p-4 px-0">
               <h2 className="text-xl font-semibold">Experience</h2>
               <Separator />
-              {resume.experience.map((exp, index) => (
+              {experience.map((exp, index) => (
                 <div key={index} className="mt-4">
                   <h3 className="text-lg font-semibold">{exp.companyName}</h3>
                   <p className="text-sm text-muted-foreground/90">
                     {exp.jobRole} • {exp.startDate} - {exp.endDate}
                   </p>
                   <ul className="list-disc list-inside text-muted-foreground p-4">
-                    {exp.description.map((desc, i) => (
+                    {exp.description?.split("/").map((desc, i) => (
                       <li key={i}>{desc}</li>
                     ))}
                   </ul>
@@ -134,7 +149,7 @@ const ResumeTemplate = ({ resume }) => {
             <CardContent className="p-4 px-0">
               <h2 className="text-xl font-semibold">Education</h2>
               <Separator />
-              {resume.education.map((edu, index) => (
+              {education.map((edu, index) => (
                 <div key={index} className="p-4">
                   <h3 className="text-lg font-semibold">
                     {edu.universityName}
@@ -152,7 +167,7 @@ const ResumeTemplate = ({ resume }) => {
             <CardContent className="p-4 px-0">
               <h2 className="text-xl font-semibold">Projects</h2>
               <Separator />
-              {resume.projects.map((project, index) => (
+              {projects.map((project, index) => (
                 <div key={index} className="mt-4">
                   <h3 className="text-lg font-semibold">{project.title}</h3>
                   {project.companyName && (
@@ -161,7 +176,7 @@ const ResumeTemplate = ({ resume }) => {
                     </p>
                   )}
                   <ul className="list-disc list-inside p-4 text-muted-foreground">
-                    {project.description.map((desc, i) => (
+                    {project.description?.split("/").map((desc, i) => (
                       <li key={i}>{desc}</li>
                     ))}
                   </ul>

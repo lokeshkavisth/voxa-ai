@@ -1,5 +1,6 @@
 "use client";
 
+import { getResumeData, saveResume } from "@/actions/resume-actions";
 import { ResumeForm } from "@/components/resume-form";
 import ResumePreview from "@/components/resume-preview";
 import { Button } from "@/components/ui/button";
@@ -7,11 +8,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "@/hooks/use-toast";
 import resumeSchema from "@/lib/schemas/resume-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { CloudDownload, CloudUpload, Laptop } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 export default function ResumePage() {
   const [activeTab, setActiveTab] = useState("form");
+  const [data, setData] = useState(null);
 
   const form = useForm({
     resolver: zodResolver(resumeSchema),
@@ -19,69 +22,69 @@ export default function ResumePage() {
       name: "",
       jobRole: "",
       profileSummary: "",
-      contact: { email: "", phone: "", location: "" },
-      socialLinks: [
-        {
-          title: "",
-          url: "",
-        },
-      ],
-      experience: [
-        {
-          companyName: "",
-          jobRole: "",
-          startDate: "",
-          endDate: "",
-          location: "",
-          description: [],
-        },
-      ],
-      education: [
-        {
-          universityName: "",
-          degreeTitle: "",
-          startYear: "",
-          endYear: "",
-          cgpa: "",
-          location: "",
-        },
-      ],
-      projects: [
-        {
-          title: "",
-          companyName: "",
-          jobRole: "",
-          startDate: "",
-          endDate: "",
-          description: "",
-        },
-      ],
+      contact: {},
+      socialLinks: [],
+      experience: [],
+      education: [],
+      projects: [],
       techSkills: [],
-      achievements: [
-        {
-          title: "",
-          description: "",
-        },
-      ],
-      courses: [
-        {
-          title: "",
-          description: "",
-          link: "",
-        },
-      ],
-      passion: { title: "", description: "" },
+      achievements: [],
+      courses: [],
+      passion: {},
     },
   });
 
-  const { control, handleSubmit, reset } = form;
+  const { handleSubmit, formState, reset } = form;
+  const { isSubmitting, isValid, isSubmitted } = formState;
 
-  const onSubmit = async (data) => {
-    // Mock function to save resume to database
-    console.log("form-data: ", "\n", data);
+  const onSubmit = async (values) => {
+    setData(values);
+    localStorage.setItem("resume", JSON.stringify(values));
+
+    toast({
+      title: "Resume saved",
+      description: "Your resume has been successfully saved to locally.",
+    });
+  };
+
+  const saveResumeToServer = async (resumeData) => {
+    if (!resumeData) {
+      toast({
+        title: "No resume data to save.",
+        description: "Please fill in the form before saving.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const res = await saveResume(resumeData);
+    console.log(res);
+
     toast({
       title: "Resume saved",
       description: "Your resume has been successfully saved to the database.",
+    });
+  };
+
+  const getResumeFromServer = async () => {
+    const res = await getResumeData();
+    if (!res.userId) {
+      toast({
+        title: "No resume data",
+        description: "No previous resume data found in the database.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setData(res.content);
+    console.log(res.content);
+    reset(res.content); // update the form data
+
+    toast({
+      title: "Resume data fetched",
+      description:
+        "Your resume data has been successfully fetched from the database.",
     });
   };
 
@@ -96,7 +99,19 @@ export default function ResumePage() {
           </TabsList>
 
           <div className="flex justify-end space-x-4">
-            <Button onClick={handleSubmit(onSubmit)}>Save Resume</Button>
+            <Button onClick={getResumeFromServer} disabled={isSubmitting}>
+              Get from Cloud <CloudDownload />
+            </Button>
+
+            <Button
+              onClick={() => saveResumeToServer(data)}
+              disabled={isSubmitting || !isSubmitted || !isValid}
+            >
+              Upload to Cloud <CloudUpload />
+            </Button>
+            <Button onClick={handleSubmit(onSubmit)} disabled={isSubmitting}>
+              {isSubmitting ? "Saving..." : "Save Locally"} <Laptop />
+            </Button>
           </div>
         </div>
 
@@ -104,7 +119,10 @@ export default function ResumePage() {
           <ResumeForm form={form} />
         </TabsContent>
         <TabsContent value="preview">
-          <ResumePreview data={form.getValues()} />
+          <ResumePreview
+            data={data}
+            // data={form.getValues()}
+          />
         </TabsContent>
       </Tabs>
     </div>

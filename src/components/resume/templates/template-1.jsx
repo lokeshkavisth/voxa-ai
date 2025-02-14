@@ -1,9 +1,8 @@
 import { Badge } from "@/components/ui/badge";
-// import { div, div } from "@/components/ui/ div";
 import { Separator } from "@/components/ui/separator";
 import { MoveUpRight } from "lucide-react";
 
-const TemplateOne = ({ resumeData }) => {
+const TemplateOne = ({ resume }) => {
   const {
     name,
     jobRole,
@@ -17,7 +16,7 @@ const TemplateOne = ({ resumeData }) => {
     achievements,
     courses,
     passion,
-  } = resumeData;
+  } = resume;
 
   return (
     <div className="max-w-4xl mx-auto p-6 bg-background border border-dashed rounded-lg">
@@ -66,7 +65,7 @@ const TemplateOne = ({ resumeData }) => {
               {exp.startDate} - {exp.endDate}
             </p>
             <ul className="list-disc list-inside text-muted-foreground mt-2">
-              {exp.description.map((desc, i) => (
+              {exp.description?.split("/").map((desc, i) => (
                 <li key={i}>{desc}</li>
               ))}
             </ul>
@@ -99,7 +98,7 @@ const TemplateOne = ({ resumeData }) => {
               {proj.startDate} - {proj.endDate || "Present"}
             </p>
             <ul className="list-disc list-inside text-muted-foreground mt-2">
-              {proj.description.map((desc, i) => (
+              {proj.description?.split("/").map((desc, i) => (
                 <li key={i}>{desc}</li>
               ))}
             </ul>
@@ -111,7 +110,7 @@ const TemplateOne = ({ resumeData }) => {
       {/* Skills */}
       <h2 className="text-xl font-semibold">Technical Skills</h2>
       <div className="flex flex-wrap gap-2 p-4">
-        {techSkills.map((skill, index) => (
+        {techSkills.split(",").map((skill, index) => (
           <Badge
             key={index}
             className={

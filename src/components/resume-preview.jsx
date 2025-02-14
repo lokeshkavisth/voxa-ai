@@ -7,7 +7,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import { useState } from "react";
 import Image from "next/image";
 
-const ResumePreview = () => {
+const ResumePreview = ({ data }) => {
+  console.log("preview page: ", data);
   const [activeTab, setActiveTab] = useState("templateOne");
   return (
     <div>
@@ -41,10 +42,10 @@ const ResumePreview = () => {
 
         <div className="mx-auto">
           <TabsContent value="templateOne" className="col-span-2">
-            <TemplateOne resumeData={sampleResumeData} />
+            <TemplateOne resumeData={data} />
           </TabsContent>
           <TabsContent value="templateTwo" className="col-span-2">
-            <ResumeTemplate resume={sampleResumeData} />
+            <ResumeTemplate resume={data} />
           </TabsContent>
         </div>
       </Tabs>

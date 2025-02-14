@@ -95,3 +95,44 @@ Adjust feedback based on performance:
 
   return prompt;
 };
+
+export const promptToAnalyzeResume = (resumeData) => {
+  const prompt = `You are an advanced Applicant Tracking System (ATS) that evaluates the content quality of resumes based on industry standards. Analyze the following resume and assess the effectiveness of its content in the following areas:
+
+Keyword Optimization: Identify missing or weak keywords commonly used in resumes for this role.
+
+Bullet Points & Descriptions: Evaluate if descriptions are too vague, too short, or missing important details.
+
+Job Titles & Consistency: Detect any inconsistencies or unclear job titles.
+
+Skills Alignment: Identify if important skills for this role are missing.
+
+General Feedback: Provide specific suggestions for improving the descriptions.
+
+⚠️ Do NOT analyze formatting, layout, or structure. Focus only on content quality.
+
+📌 Expected JSON Response Format:
+
+{
+"atsScore": 0-100,
+"missingKeywords": ["keyword1", "keyword2", ...],
+"weakDescriptions": [
+{
+"section": "string",
+"title": "string",
+"issues": ["issue1", "issue2", "issue3"]
+}
+],
+"unclearTitles": ["Title1", "Title2"],
+"missingSkills": ["Skill1", "Skill2"],
+"improvementSuggestions": "Detailed text feedback on how to improve descriptions."
+}
+
+🔹 Resume Data:
+
+${resumeData}
+
+`;
+
+  return prompt;
+};
