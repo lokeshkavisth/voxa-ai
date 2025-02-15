@@ -29,12 +29,8 @@ export const sampleResumeData = {
       startDate: "2021-01",
       endDate: "Present",
       location: "San Francisco, CA",
-      description: [
-        "Led a team of 5 developers in building a microservices-based e-commerce platform",
-        "Implemented CI/CD pipeline reducing deployment time by 60% ",
-        "Mentored junior developers and conducted code reviews ",
-        "Architected real-time inventory management system serving 100k+ daily users",
-      ],
+      description:
+        "Led a team of 5 developers in building a microservices-based e-commerce platform./Implemented CI/CD pipeline reducing deployment time by 60%./Mentored junior developers and conducted code reviews./Architected real-time inventory management system serving 100k+ daily users",
     },
     {
       companyName: "Innovation Labs",
@@ -42,11 +38,8 @@ export const sampleResumeData = {
       startDate: "2018-03",
       endDate: "2020-12",
       location: "Seattle, WA",
-      description: [
-        "Developed and maintained multiple client-facing web applications",
-        "Implemented responsive designs and improved mobile UX ",
-        " Reduced server response time by 40% through optimization",
-      ],
+      description:
+        "Developed and maintained multiple client-facing web applications./Implemented responsive designs and improved mobile UX./Reduced server response time by 40% through optimization",
     },
   ],
   education: [
@@ -74,11 +67,8 @@ export const sampleResumeData = {
       jobRole: "Tech Lead",
       startDate: "2022-06",
       endDate: "2023-02",
-      description: [
-        "Led complete redesign of enterprise e-commerce platform",
-        "Implemented microservices architecture",
-        "Improved performance metrics by 70%",
-      ],
+      description:
+        "Led complete redesign of enterprise e-commerce platform./Implemented microservices architecture  ./Implemented CI/CD pipeline reducing deployment time by 60%./Mentored junior developers and conducted code reviews./Architected real-time inventory management system serving 100k+ daily users",
     },
     {
       title: "Real-time Analytics Dashboard",
@@ -86,27 +76,13 @@ export const sampleResumeData = {
       jobRole: "Full Stack Developer",
       startDate: "2019-04",
       endDate: "2019-12",
-      description: [
-        "Built real-time analytics dashboard using React and WebSocket",
-        "Implemented data visualization with D3.js",
-        "Reduced data processing time by 50%",
-      ],
+      description:
+        "Built real-time analytics dashboard using React and WebSocket./Implemented data visualization with D3.js./Reduced data processing time by 50%",
     },
   ],
-  techSkills: [
-    "React",
-    "Node.js",
-    "TypeScript",
-    "Python",
-    "AWS",
-    "Docker",
-    "MongoDB",
-    "PostgreSQL",
-    "Redis",
-    "GraphQL",
-    "REST APIs",
-    "Microservices",
-  ],
+  techSkills:
+    "ReactJS, NodeJS, MongoDB, AWS, MySQL, Git, Docker, Kubernetes, Python, Java, C++",
+
   achievements: [
     {
       title: "Best Innovation Award 2023",
