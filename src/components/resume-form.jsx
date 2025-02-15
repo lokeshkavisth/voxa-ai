@@ -75,7 +75,7 @@ export function ResumeForm({ form }) {
   return (
     <Form {...form}>
       <form>
-        <Card className="max-w-3xl mx-auto">
+        <Card className="max-w-3xl mx-auto border-dashed">
           <CardHeader>
             <CardTitle>Personal Information</CardTitle>
           </CardHeader>
@@ -223,6 +223,7 @@ export function ResumeForm({ form }) {
             {socialLinkFields.length < 4 && (
               <Button
                 className="w-full"
+                variant="outline"
                 type="button"
                 onClick={() => appendSocialLink({ title: "", url: "" })}
               >
@@ -336,6 +337,7 @@ export function ResumeForm({ form }) {
               <Button
                 className="w-full"
                 type="button"
+                variant="outline"
                 onClick={() =>
                   appendExperience({
                     companyName: "",
@@ -469,6 +471,7 @@ export function ResumeForm({ form }) {
               <Button
                 className="w-full"
                 type="button"
+                variant="outline"
                 onClick={() =>
                   appendEducation({
                     universityName: "",
@@ -587,6 +590,7 @@ export function ResumeForm({ form }) {
               <Button
                 className="w-full"
                 type="button"
+                variant="outline"
                 onClick={() =>
                   appendProject({
                     title: "",
@@ -679,6 +683,7 @@ export function ResumeForm({ form }) {
               <Button
                 className="w-full"
                 type="button"
+                variant="outline"
                 onClick={() =>
                   appendAchievement({
                     title: "",
@@ -762,6 +767,7 @@ export function ResumeForm({ form }) {
               <Button
                 className="w-full"
                 type="button"
+                variant="outline"
                 onClick={() =>
                   appendCourse({
                     title: "",

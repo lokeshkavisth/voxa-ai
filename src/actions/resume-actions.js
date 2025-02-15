@@ -101,7 +101,7 @@ export const analyzeResume = async (resumeData) => {
       resumeData = resume;
     }
 
-    const prompt = promptToAnalyzeResume(resumeData);
+    const prompt = promptToAnalyzeResume(JSON.stringify(resumeData));
     const resumeAnalytics = await generateAiResponse(prompt);
 
     return resumeAnalytics;

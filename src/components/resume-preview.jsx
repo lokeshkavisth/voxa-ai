@@ -1,15 +1,14 @@
 "use client";
 
-import { sampleResumeData } from "@/data/sample-resume";
+import Image from "next/image";
+import { useState } from "react";
 import TemplateOne from "./resume/templates/template-1";
 import ResumeTemplate from "./resume/templates/template-2";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
-import { useState } from "react";
-import Image from "next/image";
 
-const ResumePreview = ({ data }) => {
-  console.log("preview page: ", data);
+const ResumePreview = ({ resume, templateOneRef, templateTwoRef }) => {
   const [activeTab, setActiveTab] = useState("templateOne");
+
   return (
     <div>
       <Tabs
@@ -21,31 +20,29 @@ const ResumePreview = ({ data }) => {
           <TabsList className="flex-col h-auto">
             <TabsTrigger value="templateOne">
               <Image
-                src="/resume-dummy.png"
-                alt="resume"
+                src="/resume-template-1.png"
+                alt="resume-template-1"
                 width={100}
                 height={100}
               />
-              {/* templateOne */}
             </TabsTrigger>
             <TabsTrigger value="templateTwo">
               <Image
-                src="/resume-dummy.png"
-                alt="resume"
+                src="/resume-template-2.png"
+                alt="resume-template-2"
                 width={100}
                 height={100}
               />
-              {/* templateTwo */}
             </TabsTrigger>
           </TabsList>
         </div>
 
-        <div className="mx-auto">
+        <div className="mx-auto flex gap-1 items-start">
           <TabsContent value="templateOne" className="col-span-2">
-            <TemplateOne resumeData={data} />
+            <TemplateOne resume={resume} ref={templateOneRef} />
           </TabsContent>
           <TabsContent value="templateTwo" className="col-span-2">
-            <ResumeTemplate resume={data} />
+            <ResumeTemplate resume={resume} ref={templateTwoRef} />
           </TabsContent>
         </div>
       </Tabs>

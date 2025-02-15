@@ -1,10 +1,10 @@
-import React from "react";
+import React, { forwardRef } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Mail, Phone, MapPin, Globe, MoveUpRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
-const ResumeTemplate = ({ resume }) => {
+const ResumeTemplate = forwardRef(({ resume }, ref) => {
   const {
     name,
     jobRole,
@@ -22,14 +22,14 @@ const ResumeTemplate = ({ resume }) => {
 
   return (
     <div className="max-w-5xl mx-auto bg-background border border-dashed rounded-lg">
-      <div className="grid grid-cols-3 gap-6">
+      <div ref={ref} className="grid grid-cols-3 gap-6">
         {/* Left Column (Personal Details) */}
 
         <div className="col-span-1 space-y-6 p-6 rounded-lg bg-primary-foreground">
           {/* Header */}
           <div className="text-center py-4">
             <h1 className="text-3xl font-bold">{name}</h1>
-            <p className="text-lg ">{jobRole}</p>
+            <p className="text-lg">{jobRole}</p>
           </div>
 
           {/* Contact */}
@@ -75,7 +75,7 @@ const ResumeTemplate = ({ resume }) => {
               <Separator />
               <div className="flex flex-wrap gap-2 mt-2">
                 {techSkills.split(",").map((skill, index) => (
-                  <Badge key={index} className="font-medium">
+                  <Badge key={index} variant={"outline"}>
                     {skill}
                   </Badge>
                 ))}
@@ -188,6 +188,6 @@ const ResumeTemplate = ({ resume }) => {
       </div>
     </div>
   );
-};
+});
 
 export default ResumeTemplate;

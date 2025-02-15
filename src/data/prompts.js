@@ -125,7 +125,7 @@ General Feedback: Provide specific suggestions for improving the descriptions.
 ],
 "unclearTitles": ["Title1", "Title2"],
 "missingSkills": ["Skill1", "Skill2"],
-"improvementSuggestions": "Detailed text feedback on how to improve descriptions."
+"improvementSuggestions": "string"
 }
 
 🔹 Resume Data:
