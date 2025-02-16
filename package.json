@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build",
+    "build": "npx prisma generate && next build",
     "start": "next start",
     "lint": "next lint"
   },
@@ -62,7 +62,7 @@
     "@eslint/eslintrc": "^3",
     "@tanstack/eslint-plugin-query": "^5.66.0",
     "bufferutil": "^4.0.9",
-    "eslint": "^9",
+    "eslint": "^9.20.1",
     "eslint-config-next": "15.1.6",
     "postcss": "^8",
     "prisma": "^6.3.0",
