@@ -32,7 +32,6 @@ export async function generateMCQs({ skills, length, level, quizType }) {
     const prompt = promptToGenMCQs(data);
     const { questions } = await generateAiResponse(prompt);
 
-    // console.log("ai questions", questions);
     return questions;
   } catch (error) {
     console.error("Error generating MCQs:", error.message);
@@ -56,7 +55,6 @@ export async function saveResults(data) {
 
   try {
     const { questions, selectedAnswers } = data;
-    // console.log("server: ", data);
 
     const calculateResults = questions.map((item, idx) => ({
       ...item,
@@ -81,7 +79,6 @@ export async function saveResults(data) {
         const prompt = promptToGenImprovementTip(data);
         const tip = await generateAiResponse(prompt);
         improvementTip = tip.improvementTip;
-        // console.log("ai improvement tip", improvementTip);
       } catch (error) {
         console.error("Error generating improvement tip:", error.message);
         throw new Error("Failed to generate improvement tip");

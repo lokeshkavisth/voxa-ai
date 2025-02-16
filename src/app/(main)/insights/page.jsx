@@ -20,10 +20,9 @@ const Dashboard = async () => {
   }
 
   const dashboardData = await getIndustryInsights();
-  // console.log(dashboardData);
 
   return (
-    <div className="">
+    <div>
       <div className="mb-6 space-y-4">
         <h1 className="text-3xl font-bold ">Industry Insights</h1>
         <Badge variant="secondary">

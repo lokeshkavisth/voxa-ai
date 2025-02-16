@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { Icons } from "@/components/icons";
 import { MainNav } from "@/components/main-nav";
 import { ModeToggle } from "@/components/mode-toggle";
@@ -10,13 +9,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { siteConfig } from "@/config/site";
+import Link from "next/link";
 
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 import {
   ChevronUpIcon,
   FileTextIcon,
-  GraduationCapIcon,
-  LayoutDashboardIcon,
   PenBoxIcon,
   StarsIcon,
 } from "lucide-react";
@@ -54,15 +52,6 @@ const Header = () => {
                       <span>Build Cover Letter</span>
                     </Link>
                   </DropdownMenuItem>
-                  {/* <DropdownMenuItem>
-                    <Link
-                      href={"/interview-prepration"}
-                      className="flex items-center gap-2"
-                    >
-                      <GraduationCapIcon className="size-4" />
-                      <span>Interview Prepration</span>
-                    </Link>
-                  </DropdownMenuItem> */}
                 </DropdownMenuContent>
               </DropdownMenu>
 
@@ -83,7 +72,7 @@ const Header = () => {
             </SignedIn>
             <SignedOut>
               <SignInButton>
-                <Button variant="outline">Sign In</Button>
+                <Button>Sign In</Button>
               </SignInButton>
             </SignedOut>
           </nav>

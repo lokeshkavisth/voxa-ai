@@ -168,7 +168,7 @@ export default function ResumePage() {
   useEffect(() => {
     try {
       const storedResume = localStorage.getItem("resume");
-      if (!storedResume) return; // No data found, exit early
+      if (!storedResume) return;
 
       const parsedData = JSON.parse(storedResume);
       if (parsedData && typeof parsedData === "object") {

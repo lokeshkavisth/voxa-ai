@@ -1,11 +1,22 @@
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Star } from "lucide-react";
 import Link from "next/link";
 
 export default function Hero() {
   return (
-    <section className="container mx-auto flex min-h-[calc(100vh-3.5rem)] max-w-screen-2xl flex-col items-center justify-center space-y-8 py-24 text-center md:py-32">
+    <section className="container mx-auto min-h-[700px] flex flex-col items-center justify-center space-y-8 text-center">
       <div className="space-y-4">
+        <Button
+          asChild
+          variant="outline"
+          size="sm"
+          className="rounded-full mb-10"
+        >
+          <Link href="/https://github.com/lokeshkavisth/voxa-ai">
+            <Star className="text-amber-500" />
+            Star us on Github
+          </Link>
+        </Button>
         <h1 className="bg-gradient-to-br from-foreground from-30% via-foreground/90 to-foreground/70 bg-clip-text text-4xl font-bold tracking-tight text-transparent sm:text-5xl md:text-6xl lg:text-7xl">
           Unlock Potential with
           <br />
