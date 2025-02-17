@@ -88,7 +88,8 @@ export async function saveResults(data) {
     const assessment = await prisma.assessment.create({
       data: {
         userId: existingUser.id,
-        quizScore: (wrongAnswers.length / questions.length) * 100,
+        quizScore:
+          ((questions.length - wrongAnswers.length) / questions.length) * 100,
         questions: calculateResults,
         category: existingUser.industry,
         improvementTip,
@@ -99,5 +100,36 @@ export async function saveResults(data) {
   } catch (error) {
     console.error("Error saving results:", error.message);
     throw new Error("Failed to save results");
+  }
+}
+
+export async function getAssessments() {
+  const { userId } = await auth();
+
+  if (!userId) throw new Error("Unauthorized");
+
+  // find the user
+  const existingUser = await prisma.user.findUnique({
+    where: {
+      clerkUserId: userId,
+    },
+  });
+
+  if (!existingUser) throw new Error("User not found");
+
+  try {
+    const assessments = await prisma.assessment.findMany({
+      where: {
+        userId: existingUser.id,
+      },
+      orderBy: {
+        createdAt: "asc",
+      },
+    });
+
+    return assessments;
+  } catch (error) {
+    console.error("Error fetching assessments:", error.message);
+    throw new Error("Failed to fetch assessments");
   }
 }
