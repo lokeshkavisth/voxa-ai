@@ -12,16 +12,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-// Mock data (replace with real data fetching in a production app)
-const performanceData = [
-  { date: "2023-05-01", score: 75 },
-  { date: "2023-05-08", score: 80 },
-  { date: "2023-05-15", score: 78 },
-  { date: "2023-05-22", score: 85 },
-  { date: "2023-05-29", score: 82 },
-];
-
-export default function PerformanceChart({ className }) {
+export default function PerformanceChart({ className, performanceData }) {
   return (
     <Card className={cn("w-full", className)}>
       <CardHeader>

@@ -25,7 +25,6 @@ import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/prism";
 const Result = () => {
   const { data } = useContext(DataContext);
   const result = data.results;
-  console.log(result);
 
   const incorrectQuestions = result?.questions?.filter(
     (question) => !question.isCorrect
