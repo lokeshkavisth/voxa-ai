@@ -51,7 +51,7 @@ export const updateIndustryInsights = inngest.createFunction(
         { prompt }
       );
 
-      console.log("inngest response: ", res);
+      // console.log("inngest response: ", res);
     }
   }
 );

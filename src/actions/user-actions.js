@@ -66,7 +66,6 @@ export async function updateUser(data) {
         if (!industryInsight) {
           const prompt = promptToGenInsights(data.industry, data.subIndustry);
           const insights = await generateAiResponse(prompt);
-          // console.log("ai insights", insights);
 
           industryInsight = await tx.industryInsight.create({
             data: {
@@ -102,7 +101,6 @@ export async function updateUser(data) {
         timeout: 10000,
       }
     );
-    // console.log("result;-->", result);
     revalidatePath("/");
     return result.updatedUser;
   } catch (err) {

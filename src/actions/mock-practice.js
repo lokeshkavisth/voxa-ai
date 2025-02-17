@@ -26,13 +26,13 @@ export async function generateMCQs({ skills, length, level, quizType }) {
       level,
       industry: existingUser.industry,
       subIndustry: existingUser.subIndustry,
-      skills: skills,
+      skills,
     };
 
     const prompt = promptToGenMCQs(data);
-    const { questions } = await generateAiResponse(prompt);
+    const { questions, topic } = await generateAiResponse(prompt);
 
-    return questions;
+    return { questions, topic };
   } catch (error) {
     console.error("Error generating MCQs:", error.message);
     throw new Error("Failed to generate MCQs");
@@ -54,7 +54,7 @@ export async function saveResults(data) {
   if (!existingUser) throw new Error("User not found");
 
   try {
-    const { questions, selectedAnswers } = data;
+    const { questions, selectedAnswers, topic } = data;
 
     const calculateResults = questions.map((item, idx) => ({
       ...item,
@@ -74,9 +74,14 @@ export async function saveResults(data) {
           totalQuestions: questions.length,
           correctAnswers: questions.length - wrongAnswers.length,
           wrongAnswers,
+          topic,
         };
 
-        const prompt = promptToGenImprovementTip(data);
+        const prompt = promptToGenImprovementTip(
+          data,
+          existingUser.industry,
+          existingUser.subIndustry
+        );
         const tip = await generateAiResponse(prompt);
         improvementTip = tip.improvementTip;
       } catch (error) {
@@ -93,6 +98,7 @@ export async function saveResults(data) {
         questions: calculateResults,
         category: existingUser.industry,
         improvementTip,
+        topic,
       },
     });
 

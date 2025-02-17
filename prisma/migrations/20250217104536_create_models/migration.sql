@@ -47,7 +47,7 @@ CREATE TABLE "IndustryInsight" (
 CREATE TABLE "Resume" (
     "id" UUID NOT NULL,
     "userId" UUID NOT NULL,
-    "content" TEXT NOT NULL,
+    "content" JSONB NOT NULL,
     "atsScore" DOUBLE PRECISION,
     "feedback" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -75,6 +75,7 @@ CREATE TABLE "CoverLetter" (
 CREATE TABLE "Assessment" (
     "id" UUID NOT NULL,
     "userId" UUID NOT NULL,
+    "topic" TEXT NOT NULL,
     "quizScore" DOUBLE PRECISION NOT NULL DEFAULT 0.0,
     "questions" JSONB[],
     "category" TEXT NOT NULL,
@@ -111,9 +112,6 @@ CREATE UNIQUE INDEX "CoverLetter_userId_key" ON "CoverLetter"("userId");
 
 -- CreateIndex
 CREATE INDEX "CoverLetter_userId_idx" ON "CoverLetter"("userId");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Assessment_userId_key" ON "Assessment"("userId");
 
 -- CreateIndex
 CREATE INDEX "Assessment_userId_idx" ON "Assessment"("userId");

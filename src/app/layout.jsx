@@ -3,11 +3,11 @@ import Header from "@/components/header";
 import MouseMoveEffect from "@/components/mouse-move-effect";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
+import { DataProvider } from "@/context/data-context";
+import QueryProvider from "@/lib/query-client";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { DataProvider } from "@/context/data-context";
-import QueryProvider from "@/lib/query-client";
 
 const inter = Inter({
   variable: "--font-inter",

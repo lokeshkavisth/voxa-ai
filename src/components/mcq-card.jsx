@@ -22,7 +22,7 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { Badge } from "./ui/badge";
 
-export default function McqCard({ questions }) {
+export default function McqCard({ questions, topic }) {
   const { toast } = useToast();
   const router = useRouter();
   const { setData } = useContext(DataContext);
@@ -87,7 +87,7 @@ export default function McqCard({ questions }) {
       return;
     }
 
-    mutation.mutate({ questions, selectedAnswers });
+    mutation.mutate({ questions, selectedAnswers, topic });
   };
 
   const currentQuestion = questions?.[currentQuestionIndex];

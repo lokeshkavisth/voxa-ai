@@ -32,10 +32,34 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { updateUser } from "@/actions/user-actions";
-import { toast } from "sonner";
+import { useToast } from "@/hooks/use-toast";
+import { useMutation } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 
 const OnboardingForm = ({ industries }) => {
   const [selectedIndustry, setSelectedIndustry] = useState("");
+  const router = useRouter();
+  const { toast } = useToast();
+
+  const mutation = useMutation({
+    mutationFn: updateUser,
+    onSuccess: (res) => {
+      toast({
+        title: "Onboarding completed.",
+        description:
+          "You have successfully completed the onboarding process. Welcome aboard!",
+      });
+
+      // router.push("/insights");
+    },
+    onError: (error) => {
+      toast({
+        variant: "destructive",
+        title: "Oops! Something went wrong.",
+        description: error?.message || "There was a problem with your request.",
+      });
+    },
+  });
 
   const form = useForm({
     resolver: zodResolver(onboardingSchema),
@@ -50,9 +74,12 @@ const OnboardingForm = ({ industries }) => {
 
   async function onSubmit(values) {
     if (!values) {
-      toast.error("All fields are required.");
+      toast({
+        variant: "destructive",
+        title: "All fields are required",
+        description: "Please fill all the required fields.",
+      });
       return;
-      // do something.
     }
 
     const industry = values.industry.split(" ").join("-");
@@ -63,12 +90,7 @@ const OnboardingForm = ({ industries }) => {
       subIndustry,
     };
 
-    const res = await updateUser(data);
-
-    if (!res) {
-      toast.error("Something went wrong, please try again.");
-      return;
-    }
+    mutation.mutate(data);
   }
 
   const handleIndustryChange = (value) => {
@@ -205,8 +227,14 @@ const OnboardingForm = ({ industries }) => {
         </Form>
       </CardContent>
       <CardFooter>
-        <Button type="submit" onClick={form.handleSubmit(onSubmit)}>
-          Complete Onboarding
+        <Button
+          type="submit"
+          onClick={form.handleSubmit(onSubmit)}
+          disabled={mutation.isPending}
+        >
+          {mutation.isPending
+            ? "Onboarding in progress..."
+            : "Complete Onboarding"}
         </Button>
       </CardFooter>
     </Card>

@@ -1,6 +1,6 @@
 "use server";
 
-import { getUserOnboardingStatus } from "@/actions/user-actions";
+import { checkUser, getUserOnboardingStatus } from "@/actions/user-actions";
 import { redirect } from "next/navigation";
 
 import { getIndustryInsights } from "@/actions/dashboard-actions";
@@ -13,6 +13,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Brain, BriefcaseBusiness, TrendingUp } from "lucide-react";
 
 const Dashboard = async () => {
+  await checkUser();
   const { isOnboarded } = await getUserOnboardingStatus();
 
   if (!isOnboarded) {

@@ -54,7 +54,7 @@ export function QuizPreferencesForm() {
 
   const mutation = useMutation({
     mutationFn: generateMCQs,
-    onSuccess: (questions) => {
+    onSuccess: ({ questions, topic }) => {
       if (questions.length < 1) {
         toast({
           variant: "destructive",
@@ -63,7 +63,7 @@ export function QuizPreferencesForm() {
         });
         return;
       }
-      setData({ questions });
+      setData({ questions, topic });
       router.push("/assessments/mcqs");
     },
     onError: (error) => {
@@ -82,10 +82,8 @@ export function QuizPreferencesForm() {
       level: values.level,
       skills: values.skills,
     };
-    // console.log("before: ", mutation);
     mutation.mutate(data);
   };
-  // console.log("after: ", mutation);
 
   useEffect(() => {
     async function fetchUserDetails() {
@@ -94,8 +92,6 @@ export function QuizPreferencesForm() {
       if (userDetails.skills.length > 0) {
         setSkills(userDetails.skills);
       }
-
-      // console.log(userDetails);
     }
 
     fetchUserDetails();
@@ -138,7 +134,6 @@ export function QuizPreferencesForm() {
                       <SelectItem value="multiple-choice">
                         Multiple Choice (MCQs)
                       </SelectItem>
-                      {/* <SelectItem value="flashcards">Flashcards</SelectItem> */}
                     </SelectContent>
                   </Select>
                   <FormMessage />

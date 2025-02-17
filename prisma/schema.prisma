@@ -93,6 +93,7 @@ model CoverLetter {
 model Assessment {
   id              String   @id @default(uuid()) @db.Uuid
   userId          String   @db.Uuid // Foreign key to User
+  topic           String
   quizScore       Float    @default(0.0)
   questions       Json[]     // JSON format for questions and answers
   category        String

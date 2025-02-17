@@ -9,7 +9,7 @@ export default function MCQsPage() {
 
   return (
     <div>
-      <McqCard questions={data.questions} />
+      <McqCard questions={data.questions} topic={data.topic} />
     </div>
   );
 }

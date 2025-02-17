@@ -49,6 +49,7 @@ Each question should:
 Return the response in JSON format only. No additional text or formatting, just this structure:  
 
 {
+  "topic": "string",
   "questions": [
     {
       "question": "string",
@@ -69,12 +70,14 @@ Return the response in JSON format only. No additional text or formatting, just 
   return prompt;
 };
 
-export const promptToGenImprovementTip = (data) => {
-  const prompt = `Analyze the user's quiz performance based on their wrong answers. Generate a single, personalized improvement tip that helps them strengthen their weak areas. The tip should focus on patterns in their mistakes, key concepts they struggle with, and actionable advice to improve. Keep it concise, practical, and encouraging. If they performed well overall but made a few mistakes, acknowledge their strength while suggesting areas to refine. If they struggled significantly, provide a motivating improvement plan.
+export const promptToGenImprovementTip = (data, industry, subIndustry) => {
+  const prompt = `  
+  Analyze the user's quiz performance based on their wrong answers. Generate a single, personalized improvement tip that helps them strengthen their weak areas. The tip should focus on patterns in their mistakes, key concepts they struggle with, and actionable advice to improve. Keep it concise, practical, and encouraging. If they performed well overall but made a few mistakes, acknowledge their strength while suggesting areas to refine. If they struggled significantly, provide a motivating improvement plan.
+
 
 Input Format (JSON):
 
-${data}
+${JSON.stringify(data)}
 
 
 Expected Output (JSON):
@@ -84,14 +87,16 @@ Expected Output (JSON):
 }
 
 Guidelines for Generating the Tip:
- - Identify patterns in the user's mistakes.
 
-Adjust feedback based on performance:
-- 80%+ correct: Encourage advanced learning.
-- 50-80% correct: Suggest focused improvement.
-- Below 50% correct: Provide fundamental learning advice.
-- If most mistakes come from a specific category, mention it.
-- Keep the tip motivational and actionable.`;
+-Identify patterns in the user's wrong answers to understand the common areas they are struggling with.
+- Adjust feedback based on performance:
+- 80%+ correct: Congratulate the user on their strong performance, and suggest advanced topics or fine-tuning techniques to push them further.
+- 50-80% correct: Recognize the effort and suggest targeted improvement in specific concepts that need attention. Encourage consistent practice.
+- Below 50% correct: Acknowledge the struggle and emphasize the importance of mastering foundational concepts. Suggest easy-to-follow learning resources to strengthen weak areas.
+- If most mistakes come from a specific category or concept, mention it explicitly and focus the improvement tip on that topic.
+- The tone of the improvement tip should be motivational, practical, and actionable
+—help the user feel empowered to improve, without discouragement.
+`;
 
   return prompt;
 };
