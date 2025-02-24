@@ -34,6 +34,7 @@ export const generateAiResponse = async (prompt) => {
   });
 
   const result = await chatSession.sendMessage(prompt);
+  console.log(result);
   const textResponse = result.response.text();
 
   const formatedText = textResponse.replace(/```(?:json)?\n?/g, "").trim();

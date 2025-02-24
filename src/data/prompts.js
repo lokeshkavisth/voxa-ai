@@ -141,3 +141,43 @@ ${resumeData}
 
   return prompt;
 };
+
+export const promptToGenCoverLetter = (
+  jobRole,
+  companyName,
+  tone,
+  jobDescription,
+  length,
+  user
+) => {
+  const prompt = `Generate a compelling and professionally formatted cover letter for a ${jobRole} position at ${companyName}, tailored to a "${tone}" tone. The letter should effectively highlight the candidate's qualifications while aligning with the company's needs. Ensure the letter is approximately ${length} words long.
+
+Candidate Information:
+Industry: ${user.industry}
+Years of Experience: ${user.experience}
+Key Skills: ${user.skills?.join(", ")}
+Professional Background & Expertise: ${user.bio}
+Job Description & Requirements:
+${jobDescription}
+
+Guidelines for the Cover Letter:
+- Use a "${tone}" tone that matches the candidate’s personality and the industry’s expectations.
+- Start with a strong opening that grabs attention and expresses enthusiasm for the role.
+- Clearly highlight relevant skills, achievements, and experiences—especially those aligning with the job description.
+- Demonstrate a deep understanding of the company’s mission, values, and needs, showing how the candidate can contribute effectively.
+- Keep the letter concise (max 400 words) while ensuring it remains engaging and impactful.
+- Use proper business letter formatting in Markdown, including a professional salutation, structured body, and a compelling closing statement.
+- Incorporate quantifiable achievements or specific examples to showcase expertise and results.
+- End with a persuasive and action-oriented closing statement, encouraging further discussion or an interview.
+
+📌 Expected JSON Response Format:
+
+{
+"markdown": "string",
+}
+
+
+Format the final output in Markdown to ensure readability and professionalism.`;
+
+  return prompt;
+};
