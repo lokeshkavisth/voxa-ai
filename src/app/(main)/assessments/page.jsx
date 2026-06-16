@@ -1,9 +1,11 @@
 import { getAssessments } from "@/actions/mock-practice";
+import { getUserOnboardingStatus } from "@/actions/user-actions";
 import PerformanceChart from "@/components/performance-chart";
 import { QuizPreferencesForm } from "@/components/quiz-preferences-form";
 import { RecentQuizzes } from "@/components/recent-quizzes";
 import StatCard from "@/components/stat-card";
 import { Brain, TrendingDown, TrendingUp } from "lucide-react";
+import { redirect } from "next/navigation";
 
 function calculateAverageScore(assessments) {
   if (!assessments || assessments.length === 0) return 0;
@@ -25,6 +27,12 @@ function calculateTotalQuestions(assessments) {
 }
 
 const Assessments = async () => {
+  const { isOnboarded } = await getUserOnboardingStatus();
+
+  if (!isOnboarded) {
+    redirect("/onboarding");
+  }
+
   let assessments = [];
 
   try {

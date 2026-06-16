@@ -1,6 +1,4 @@
-"use server";
-
-import { checkUser, getUserOnboardingStatus } from "@/actions/user-actions";
+import { getUserOnboardingStatus } from "@/actions/user-actions";
 import { redirect } from "next/navigation";
 
 import { getIndustryInsights } from "@/actions/dashboard-actions";
@@ -13,7 +11,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Brain, BriefcaseBusiness, TrendingUp } from "lucide-react";
 
 const Dashboard = async () => {
-  await checkUser();
   const { isOnboarded } = await getUserOnboardingStatus();
 
   if (!isOnboarded) {
@@ -61,7 +58,7 @@ const Dashboard = async () => {
           icon={
             dashboardData.marketOutlook === "POSITIVE" ? (
               <TrendingUp className="size-4 text-green-500" />
-            ) : dashboardData.marketOutlook === "NETURAL" ? (
+            ) : dashboardData.marketOutlook === "NEUTRAL" ? (
               <TrendingUp className="size-4" />
             ) : (
               <TrendingUp className="size-4 text-red-500" />

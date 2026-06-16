@@ -1,11 +1,11 @@
 export const siteConfig = {
   name: "Voxa.ai",
-  url: "https://ui.shadcn.com",
-  ogImage: "https://ui.shadcn.com/og.jpg",
+  url: "https://voxa.ai",
+  ogImage: "https://voxa.ai/og.jpg",
   description:
-    "Beautifully designed components that you can copy and paste into your apps. Accessible. Customizable. Open Source.",
+    "AI-powered career coaching with personalized insights, interview prep, and resume tools.",
   links: {
-    twitter: "https://twitter.com/shadcn",
+    twitter: "https://x.com/lokeshkavisth",
     github: "https://github.com/lokeshkavisth/voxa-ai",
   },
 };

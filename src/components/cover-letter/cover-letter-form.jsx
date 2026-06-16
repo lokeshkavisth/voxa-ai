@@ -29,7 +29,7 @@ import {
 import { generateCoverLetter } from "@/actions/cover-letter-actions";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { toast } from "@/hooks/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { coverLetterSchema } from "@/lib/schemas/cover-letter-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
@@ -39,6 +39,7 @@ import { useForm } from "react-hook-form";
 
 const CoverLetterForm = () => {
   const [generatedCoverLetter, setGeneratedCoverLetter] = useState(null);
+  const { toast } = useToast();
 
   const form = useForm({
     resolver: zodResolver(coverLetterSchema),
@@ -58,7 +59,6 @@ const CoverLetterForm = () => {
         title: "Cover letter generated",
         description: "Your cover letter has been successfully generated.",
       });
-      console.log(data);
       setGeneratedCoverLetter(data);
     },
     onError: (error) => {
@@ -72,6 +72,24 @@ const CoverLetterForm = () => {
 
   async function onSubmit(values) {
     mutation.mutate(values);
+  }
+
+  async function handleCopy() {
+    if (!generatedCoverLetter) return;
+
+    try {
+      await navigator.clipboard.writeText(generatedCoverLetter);
+      toast({
+        title: "Copied to clipboard",
+        description: "Your cover letter is ready to paste.",
+      });
+    } catch {
+      toast({
+        title: "Copy failed",
+        description: "Could not copy to clipboard. Please copy manually.",
+        variant: "destructive",
+      });
+    }
   }
 
   return (
@@ -230,7 +248,11 @@ const CoverLetterForm = () => {
           )}
         </CardContent>
         <CardFooter>
-          <Button className="w-full" disabled={!generatedCoverLetter}>
+          <Button
+            className="w-full"
+            disabled={!generatedCoverLetter}
+            onClick={handleCopy}
+          >
             Copy to Clipboard
           </Button>
         </CardFooter>

@@ -40,7 +40,7 @@ const ResumeFeedback = ({ feedbackData }) => {
       </CardHeader>
       <CardContent>
         <div className="flex flex-wrap gap-2">
-          {feedbackData.missingKeywords.map((keyword, index) => (
+          {feedbackData.missingKeywords?.map((keyword, index) => (
             <Badge key={index} variant="secondary">
               {keyword}
             </Badge>
@@ -56,7 +56,7 @@ const ResumeFeedback = ({ feedbackData }) => {
       </CardHeader>
       <CardContent>
         <Accordion type="multiple">
-          {feedbackData.weakDescriptions.map((item, index) => (
+          {feedbackData.weakDescriptions?.map((item, index) => (
             <AccordionItem key={index} value={`${item.section}-${item.title}`}>
               <AccordionTrigger>
                 {item.section.charAt(0).toUpperCase() + item.section.slice(1)}:{" "}
@@ -64,7 +64,7 @@ const ResumeFeedback = ({ feedbackData }) => {
               </AccordionTrigger>
               <AccordionContent>
                 <ul className="list-disc pl-5 space-y-2">
-                  {item.issues.map((issue, issueIndex) => (
+                  {item.issues?.map((issue, issueIndex) => (
                     <li key={issueIndex}>{issue}</li>
                   ))}
                 </ul>
@@ -82,7 +82,7 @@ const ResumeFeedback = ({ feedbackData }) => {
       </CardHeader>
       <CardContent>
         <ul className="list-disc pl-5 space-y-2">
-          {feedbackData.unclearTitles.map((title, index) => (
+          {feedbackData.unclearTitles?.map((title, index) => (
             <li key={index}>{title}</li>
           ))}
         </ul>
@@ -96,7 +96,7 @@ const ResumeFeedback = ({ feedbackData }) => {
       </CardHeader>
       <CardContent>
         <div className="flex flex-wrap gap-2">
-          {feedbackData.missingSkills.map((skill, index) => (
+          {feedbackData.missingSkills?.map((skill, index) => (
             <Badge key={index} variant="outline">
               {skill}
             </Badge>

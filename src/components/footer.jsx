@@ -14,22 +14,38 @@ const Footer = () => {
         </div>
         <div className="grid flex-1 grid-cols-2 gap-12 sm:grid-cols-3">
           <div className="space-y-4">
-            <h3 className="text-sm font-medium">Solutions</h3>
+            <h3 className="text-sm font-medium">Product</h3>
             <ul className="space-y-3 text-sm">
               <li>
                 <Link
-                  href="/ai-analytics"
+                  href="/insights"
                   className="text-muted-foreground transition-colors hover:text-primary"
                 >
-                  AI Analytics
+                  Industry Insights
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/cloud-services"
+                  href="/assessments"
                   className="text-muted-foreground transition-colors hover:text-primary"
                 >
-                  Cloud Services
+                  Assessments
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/resume"
+                  className="text-muted-foreground transition-colors hover:text-primary"
+                >
+                  Resume Builder
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/cover-letter"
+                  className="text-muted-foreground transition-colors hover:text-primary"
+                >
+                  Cover Letter
                 </Link>
               </li>
             </ul>
@@ -47,10 +63,10 @@ const Footer = () => {
               </li>
               <li>
                 <Link
-                  href="/careers"
+                  href="/onboarding"
                   className="text-muted-foreground transition-colors hover:text-primary"
                 >
-                  Careers
+                  Get Started
                 </Link>
               </li>
             </ul>
@@ -59,8 +75,10 @@ const Footer = () => {
             <h3 className="text-sm font-medium">Connect</h3>
             <div className="flex space-x-4">
               <Link
-                href="https://github.com/voxa-ai"
+                href="https://github.com/lokeshkavisth/voxa-ai"
                 className="text-muted-foreground transition-colors hover:text-primary"
+                target="_blank"
+                rel="noopener noreferrer"
               >
                 <Github className="h-5 w-5" />
                 <span className="sr-only">GitHub</span>
@@ -68,6 +86,8 @@ const Footer = () => {
               <Link
                 href="https://x.com/lokeshkavisth"
                 className="text-muted-foreground transition-colors hover:text-primary"
+                target="_blank"
+                rel="noopener noreferrer"
               >
                 <Twitter className="h-5 w-5" />
                 <span className="sr-only">Twitter</span>
@@ -75,6 +95,8 @@ const Footer = () => {
               <Link
                 href="https://linkedin.com/in/lokeshkavisth"
                 className="text-muted-foreground transition-colors hover:text-primary"
+                target="_blank"
+                rel="noopener noreferrer"
               >
                 <Linkedin className="h-5 w-5" />
                 <span className="sr-only">LinkedIn</span>

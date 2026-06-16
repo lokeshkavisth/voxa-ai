@@ -149,7 +149,7 @@ export default function McqCard({ questions, topic }) {
           </RadioGroup>
 
           <div className="flex flex-wrap gap-2 mt-4">
-            {currentQuestion.tags.map((tag, index) => (
+            {currentQuestion.tags?.map((tag, index) => (
               <Badge key={index} variant="secondary">
                 {tag}
               </Badge>

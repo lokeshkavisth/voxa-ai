@@ -43,8 +43,8 @@ model User {
 
 model IndustryInsight {
   id               String   @id @default(uuid()) @db.Uuid
-  industry         String   @unique
-  subIndustry      String   
+  industry         String
+  subIndustry      String
   salaryRanges     Json[]   // JSON format for salary ranges {role: string, min: float, mid: float, max: float, location: string?}
   growthRate       Float    @default(0.0)
   demandLevel      DemandLevel
@@ -55,6 +55,7 @@ model IndustryInsight {
   updatedAt        DateTime @default(now())
   nextUpdate       DateTime // Scheduled time
 
+  @@unique([industry, subIndustry])
   @@index([industry, subIndustry, demandLevel]) // Index for faster queries
 }
 

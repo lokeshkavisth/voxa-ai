@@ -12,15 +12,15 @@ export default function SalaryChart({ salaryRanges }) {
   }));
 
   const chartConfig = {
-    min: {
+    Min: {
       label: "Minimum",
       color: "hsl(var(--chart-1))",
     },
-    median: {
+    Median: {
       label: "Median",
       color: "hsl(var(--chart-2))",
     },
-    max: {
+    Max: {
       label: "Maximum",
       color: "hsl(var(--chart-3))",
     },
@@ -41,9 +41,9 @@ export default function SalaryChart({ salaryRanges }) {
           cursor={false}
           content={<ChartTooltipContent indicator="dashed" />}
         />
-        <Bar dataKey="Min" fill="var(--color-min)" radius={4} />
-        <Bar dataKey="Median" fill="var(--color-median)" radius={4} />
-        <Bar dataKey="Max" fill="var(--color-max)" radius={4} />
+        <Bar dataKey="Min" fill="var(--color-Min)" radius={4} />
+        <Bar dataKey="Median" fill="var(--color-Median)" radius={4} />
+        <Bar dataKey="Max" fill="var(--color-Max)" radius={4} />
       </BarChart>
     </ChartContainer>
   );

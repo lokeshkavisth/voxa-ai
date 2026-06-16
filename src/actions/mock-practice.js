@@ -70,7 +70,7 @@ export async function saveResults(data) {
 
     if (wrongAnswers.length > 0) {
       try {
-        const data = {
+        const tipData = {
           totalQuestions: questions.length,
           correctAnswers: questions.length - wrongAnswers.length,
           wrongAnswers,
@@ -78,7 +78,7 @@ export async function saveResults(data) {
         };
 
         const prompt = promptToGenImprovementTip(
-          data,
+          tipData,
           existingUser.industry,
           existingUser.subIndustry
         );
@@ -86,15 +86,19 @@ export async function saveResults(data) {
         improvementTip = tip.improvementTip;
       } catch (error) {
         console.error("Error generating improvement tip:", error.message);
-        throw new Error("Failed to generate improvement tip");
       }
     }
+
+    const totalQuestions = questions.length;
+    const quizScore =
+      totalQuestions > 0
+        ? ((totalQuestions - wrongAnswers.length) / totalQuestions) * 100
+        : 0;
 
     const assessment = await prisma.assessment.create({
       data: {
         userId: existingUser.id,
-        quizScore:
-          ((questions.length - wrongAnswers.length) / questions.length) * 100,
+        quizScore,
         questions: calculateResults,
         category: existingUser.industry,
         improvementTip,
@@ -129,7 +133,7 @@ export async function getAssessments() {
         userId: existingUser.id,
       },
       orderBy: {
-        createdAt: "asc",
+        createdAt: "desc",
       },
     });
 

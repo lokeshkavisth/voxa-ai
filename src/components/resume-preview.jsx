@@ -6,14 +6,24 @@ import TemplateOne from "./resume/templates/template-1";
 import ResumeTemplate from "./resume/templates/template-2";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 
-const ResumePreview = ({ resume, templateOneRef, templateTwoRef }) => {
+const ResumePreview = ({
+  resume,
+  templateOneRef,
+  templateTwoRef,
+  onTemplateChange,
+}) => {
   const [activeTab, setActiveTab] = useState("templateOne");
+
+  const handleTabChange = (value) => {
+    setActiveTab(value);
+    onTemplateChange?.(value);
+  };
 
   return (
     <div>
       <Tabs
         value={activeTab}
-        onValueChange={setActiveTab}
+        onValueChange={handleTabChange}
         className="flex gap-8 items-start"
       >
         <div>

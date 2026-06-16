@@ -3,34 +3,34 @@
 import prisma from "@/lib/prisma";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
-import { generateAiResponse } from "./ai-actions";
-import { promptToGenInsights } from "@/data/prompts";
+import { getOrCreateIndustryInsight } from "@/lib/industry-insights";
+import { onboardingSchema } from "@/lib/schemas/onboarding-schema";
 
-// check if user is already in the db if not create new user
 export async function checkUser() {
   try {
     const user = await currentUser();
 
     if (!user) return null;
 
-    let existingUser = await prisma.user.findUnique({
-      where: {
-        clerkUserId: user.id,
-      },
-    });
-
-    if (!existingUser) {
-      existingUser = await prisma.user.create({
-        data: {
-          clerkUserId: user.id,
-          displayName: user.fullName,
-          imageUrl: user.imageUrl,
-          email: user.primaryEmailAddress.emailAddress,
-        },
-      });
+    const email = user.primaryEmailAddress?.emailAddress;
+    if (!email) {
+      console.error("User has no primary email address");
+      return null;
     }
 
-    return existingUser;
+    return await prisma.user.upsert({
+      where: { clerkUserId: user.id },
+      update: {
+        displayName: user.fullName,
+        imageUrl: user.imageUrl,
+      },
+      create: {
+        clerkUserId: user.id,
+        displayName: user.fullName,
+        imageUrl: user.imageUrl,
+        email,
+      },
+    });
   } catch (error) {
     console.error("Error checking/creating user:", error);
     return null;
@@ -42,70 +42,41 @@ export async function updateUser(data) {
 
   if (!userId) throw new Error("Unauthorized");
 
-  // find the user
+  const parsed = onboardingSchema.safeParse(data);
+  if (!parsed.success) {
+    throw new Error(parsed.error.errors[0]?.message || "Invalid onboarding data");
+  }
+
+  const formData = parsed.data;
+  const industry = formData.industry.split(" ").join("-");
+  const subIndustry = formData.subIndustry.split(" ").join("-");
+
   const existingUser = await prisma.user.findUnique({
-    where: {
-      clerkUserId: userId,
-    },
+    where: { clerkUserId: userId },
   });
 
   if (!existingUser) throw new Error("User not found");
 
   try {
-    const result = await prisma.$transaction(
-      async (tx) => {
-        // find if the industry exists
-        let industryInsight = await tx.industryInsight.findUnique({
-          where: {
-            industry: data.industry,
-            subIndustry: data.subIndustry,
-          },
-        });
+    await getOrCreateIndustryInsight(industry, subIndustry);
 
-        // if not industry insight create new
-        if (!industryInsight) {
-          const prompt = promptToGenInsights(data.industry, data.subIndustry);
-          const insights = await generateAiResponse(prompt);
-
-          industryInsight = await tx.industryInsight.create({
-            data: {
-              industry: data.industry,
-              subIndustry: data.subIndustry,
-              ...insights,
-              demandLevel: insights.demandLevel.toUpperCase(),
-              marketOutlook: insights.marketOutlook.toUpperCase(),
-              nextUpdate: new Date(
-                new Date().setHours(0, 0, 0, 0) + 7 * 24 * 60 * 60 * 1000 // update every week at midnight from now
-              ),
-            },
-          });
-        }
-
-        // update the user
-        const updatedUser = await tx.user.update({
-          where: {
-            id: existingUser.id,
-          },
-          data: {
-            industry: data.industry,
-            subIndustry: data.subIndustry,
-            bio: data.bio,
-            experience: data.experience,
-            skills: data.skills,
-          },
-        });
-
-        return { updatedUser, industryInsight };
+    const updatedUser = await prisma.user.update({
+      where: { id: existingUser.id },
+      data: {
+        industry,
+        subIndustry,
+        bio: formData.bio,
+        experience: formData.experience,
+        skills: formData.skills,
       },
-      {
-        timeout: 10000,
-      }
-    );
+    });
+
     revalidatePath("/");
-    return result.updatedUser;
+    revalidatePath("/insights");
+    return updatedUser;
   } catch (err) {
-    console.error("Error creating user:", err.message);
-    throw new Error(`Failed to create user: ${err.message}`);
+    console.error("Error updating user:", err.message);
+    throw new Error(`Failed to update user: ${err.message}`);
   }
 }
 
@@ -114,32 +85,21 @@ export async function getUserOnboardingStatus() {
 
   if (!userId) throw new Error("Unauthorized");
 
-  const existingUser = await prisma.user.findUnique({
-    where: {
-      clerkUserId: userId,
+  const user = await prisma.user.findUnique({
+    where: { clerkUserId: userId },
+    select: {
+      industry: true,
+      subIndustry: true,
     },
   });
 
-  if (!existingUser) throw new Error("User not found");
-
-  try {
-    const user = await prisma.user.findUnique({
-      where: {
-        clerkUserId: userId,
-      },
-      select: {
-        industry: true,
-        // subIndustry: true,
-      },
-    });
-
-    return {
-      isOnboarded: !!user?.industry,
-    };
-  } catch (err) {
-    console.error("Error creating user:", err.message);
-    throw new Error(`Failed to check onboarding status: ${err.message}`);
+  if (!user) {
+    return { isOnboarded: false };
   }
+
+  return {
+    isOnboarded: !!(user.industry && user.subIndustry),
+  };
 }
 
 export async function getUserDetails() {
@@ -148,17 +108,10 @@ export async function getUserDetails() {
   if (!userId) throw new Error("Unauthorized");
 
   const existingUser = await prisma.user.findUnique({
-    where: {
-      clerkUserId: userId,
-    },
+    where: { clerkUserId: userId },
   });
 
   if (!existingUser) throw new Error("User not found");
 
-  try {
-    return existingUser;
-  } catch (err) {
-    console.error("Error creating user:", err.message);
-    throw new Error(`Failed to get user details: ${err.message}`);
-  }
+  return existingUser;
 }

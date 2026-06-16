@@ -1,6 +1,8 @@
-import React from "react";
+import { checkUser } from "@/actions/user-actions";
 
-const MainLayout = ({ children }) => {
+const MainLayout = async ({ children }) => {
+  await checkUser();
+
   return <div className="container mx-auto">{children}</div>;
 };
 

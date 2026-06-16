@@ -6,7 +6,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Badge, badgeVariants } from "@/components/ui/badge";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -32,12 +32,12 @@ const Result = () => {
 
   const getBadgeVariant = (score) => {
     if (score >= 80) {
-      return badgeVariants.Success;
+      return "default";
     }
-    return badgeVariants.Secondary;
+    return "secondary";
   };
 
-  if (!result || result.length < 1) {
+  if (!result?.id) {
     return (
       <div className="flex flex-col items-center justify-center gap-4">
         <p className="text-center text-lg font-medium text-gray-700">
@@ -153,9 +153,11 @@ const Result = () => {
         </Card>
       </div>
       <div className="flex justify-center">
-        <Button size="lg">
-          <Link href={"/assessments"}>Take me to the assessments</Link>
-          <ArrowRight />
+        <Button size="lg" asChild>
+          <Link href="/assessments">
+            Take me to the assessments
+            <ArrowRight />
+          </Link>
         </Button>
       </div>
     </div>

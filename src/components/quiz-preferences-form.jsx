@@ -26,7 +26,7 @@ import { DiamondPlus, Trophy } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
+import { useToast } from "@/hooks/use-toast";
 import {
   Dialog,
   DialogContent,
@@ -39,6 +39,7 @@ import {
 export function QuizPreferencesForm() {
   const router = useRouter();
   const { setData } = useContext(DataContext);
+  const { toast } = useToast();
 
   const [skills, setSkills] = useState([]);
 
@@ -87,10 +88,14 @@ export function QuizPreferencesForm() {
 
   useEffect(() => {
     async function fetchUserDetails() {
-      const userDetails = await getUserDetails();
+      try {
+        const userDetails = await getUserDetails();
 
-      if (userDetails.skills.length > 0) {
-        setSkills(userDetails.skills);
+        if (userDetails.skills.length > 0) {
+          setSkills(userDetails.skills);
+        }
+      } catch (error) {
+        console.error("Failed to fetch user details:", error);
       }
     }
 

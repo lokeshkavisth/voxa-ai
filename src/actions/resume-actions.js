@@ -5,33 +5,31 @@ import prisma from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
 import { generateAiResponse } from "./ai-actions";
+import resumeSchema from "@/lib/schemas/resume-schema";
 
 export const saveResume = async (resumeData) => {
   const { userId } = await auth();
 
   if (!userId) throw new Error("Unauthorized");
 
-  // find the user
+  const parsed = resumeSchema.safeParse(resumeData);
+  if (!parsed.success) {
+    throw new Error(parsed.error.errors[0]?.message || "Invalid resume data");
+  }
+
   const existingUser = await prisma.user.findUnique({
-    where: {
-      clerkUserId: userId,
-    },
+    where: { clerkUserId: userId },
   });
 
   if (!existingUser) throw new Error("User not found");
 
   try {
-    // check is resume already exists if exists replace else create new
     const resume = await prisma.resume.upsert({
-      where: {
-        userId: existingUser.id,
-      },
-      update: {
-        content: resumeData,
-      },
+      where: { userId: existingUser.id },
+      update: { content: parsed.data },
       create: {
         userId: existingUser.id,
-        content: resumeData,
+        content: parsed.data,
       },
     });
 
@@ -48,20 +46,15 @@ export const getResumeData = async () => {
 
   if (!userId) throw new Error("Unauthorized");
 
-  // find the user
   const existingUser = await prisma.user.findUnique({
-    where: {
-      clerkUserId: userId,
-    },
+    where: { clerkUserId: userId },
   });
 
   if (!existingUser) throw new Error("User not found");
 
   try {
     const resume = await prisma.resume.findUnique({
-      where: {
-        userId: existingUser.id,
-      },
+      where: { userId: existingUser.id },
     });
 
     if (!resume) throw new Error("Resume not found");
@@ -78,32 +71,46 @@ export const analyzeResume = async (resumeData) => {
 
   if (!userId) throw new Error("Unauthorized");
 
-  // find the user
   const existingUser = await prisma.user.findUnique({
-    where: {
-      clerkUserId: userId,
-    },
+    where: { clerkUserId: userId },
   });
 
   if (!existingUser) throw new Error("User not found");
 
   try {
-    if (!resumeData) {
-      // get resumeData from database
+    let content = resumeData;
+
+    if (!content) {
       const resume = await prisma.resume.findUnique({
-        where: {
-          userId: existingUser.id,
-        },
+        where: { userId: existingUser.id },
       });
 
       if (!resume) throw new Error("Resume not found in database");
 
-      resumeData = resume;
+      content = resume.content;
     }
 
-    const prompt = promptToAnalyzeResume(JSON.stringify(resumeData));
+    const parsed = resumeSchema.safeParse(content);
+    const payload = parsed.success ? parsed.data : content;
+
+    const prompt = promptToAnalyzeResume(JSON.stringify(payload));
     const resumeAnalytics = await generateAiResponse(prompt);
 
+    await prisma.resume.upsert({
+      where: { userId: existingUser.id },
+      update: {
+        atsScore: resumeAnalytics.atsScore ?? null,
+        feedback: JSON.stringify(resumeAnalytics),
+      },
+      create: {
+        userId: existingUser.id,
+        content: parsed.success ? parsed.data : {},
+        atsScore: resumeAnalytics.atsScore ?? null,
+        feedback: JSON.stringify(resumeAnalytics),
+      },
+    });
+
+    revalidatePath("/resume");
     return resumeAnalytics;
   } catch (error) {
     console.error("Error analyzing resume:", error.message);

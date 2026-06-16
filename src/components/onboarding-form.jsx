@@ -51,6 +51,7 @@ const OnboardingForm = ({ industries }) => {
       });
 
       // router.push("/insights");
+      router.push("/insights");
     },
     onError: (error) => {
       toast({

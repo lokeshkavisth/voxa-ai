@@ -46,7 +46,10 @@ export default function ResumePage() {
   const [feedbackData, setFeedbackData] = useState(null);
   const [isGenerating, setIsGenerating] = useState(false);
 
-  const templateRef = useRef(null);
+  const [activeTemplate, setActiveTemplate] = useState("templateOne");
+
+  const templateOneRef = useRef(null);
+  const templateTwoRef = useRef(null);
 
   const form = useForm({
     resolver: zodResolver(resumeSchema),
@@ -192,7 +195,10 @@ export default function ResumePage() {
     try {
       setIsGenerating(true);
 
-      const input = templateRef.current;
+      const input =
+        activeTemplate === "templateOne"
+          ? templateOneRef.current
+          : templateTwoRef.current;
 
       if (!input) {
         toast({
@@ -348,8 +354,9 @@ export default function ResumePage() {
         <TabsContent value="preview">
           <ResumePreview
             resume={resume || sampleResumeData}
-            templateOneRef={templateRef}
-            templateTwoRef={templateRef}
+            templateOneRef={templateOneRef}
+            templateTwoRef={templateTwoRef}
+            onTemplateChange={setActiveTemplate}
           />
         </TabsContent>
       </Tabs>

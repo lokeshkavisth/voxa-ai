@@ -133,7 +133,7 @@ export default function About() {
           <CardContent>
             <div className="flex justify-around">
               <Link
-                href="https://twitter.com/streamline"
+                href="https://x.com/lokeshkavisth"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -143,27 +143,17 @@ export default function About() {
                 </Button>
               </Link>
               <Link
-                href="https://facebook.com/streamline"
+                href="https://github.com/lokeshkavisth/voxa-ai"
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 <Button variant="ghost" size="icon">
-                  <Facebook className="h-5 w-5" />
-                  <span className="sr-only">Facebook</span>
+                  <Github className="h-5 w-5" />
+                  <span className="sr-only">GitHub</span>
                 </Button>
               </Link>
               <Link
-                href="https://instagram.com/streamline"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Button variant="ghost" size="icon">
-                  <Instagram className="h-5 w-5" />
-                  <span className="sr-only">Instagram</span>
-                </Button>
-              </Link>
-              <Link
-                href="https://linkedin.com/company/streamline"
+                href="https://linkedin.com/in/lokeshkavisth"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -183,10 +173,10 @@ export default function About() {
           </CardHeader>
           <CardContent>
             <p className="text-center text-lg">
-              At StreamLine, we're committed to revolutionizing the way teams
-              work together. Our mission is to provide intuitive, powerful tools
-              that enhance collaboration, boost productivity, and drive
-              innovation across organizations of all sizes.
+              At Voxa.ai, we&apos;re committed to helping professionals unlock
+              their career potential. Our mission is to provide AI-powered
+              coaching, industry insights, and practical tools that enhance
+              interview readiness, resume quality, and long-term career growth.
             </p>
           </CardContent>
         </Card>

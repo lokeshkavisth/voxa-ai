@@ -12,7 +12,11 @@ export default function Hero() {
           size="sm"
           className="rounded-full mb-10"
         >
-          <Link href="/https://github.com/lokeshkavisth/voxa-ai">
+          <Link
+            href="https://github.com/lokeshkavisth/voxa-ai"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <Star className="text-amber-500" />
             Star us on Github
           </Link>
@@ -29,11 +33,13 @@ export default function Hero() {
         </p>
       </div>
       <div className="flex gap-4">
-        <Button size="lg">
-          <Link href="/insights">Unlock My Potential</Link>
-          <ArrowRight className="ml-2 h-4 w-4" />
+        <Button size="lg" asChild>
+          <Link href="/insights">
+            Unlock My Potential
+            <ArrowRight className="ml-2 h-4 w-4" />
+          </Link>
         </Button>
-        <Button variant="outline" size="lg">
+        <Button variant="outline" size="lg" asChild>
           <Link href="/about">See How It Works</Link>
         </Button>
       </div>
